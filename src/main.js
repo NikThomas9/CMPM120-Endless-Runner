@@ -2,7 +2,14 @@ let config = {
     type: Phaser.CANVAS,
     width: 640,
     height: 480,
-    //scene: 
+    scene:  'Play',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 500 },
+            debug: false 
+        }
+    },
 }
 
 let game = new Phaser.Game(config);
