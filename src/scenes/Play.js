@@ -7,6 +7,7 @@ class Play extends Phaser.Scene {
     {
         //Load Sprites
         this.load.image('player', 'assets/player.png');
+        this.load.image('enemy', 'assets/obstacle1.png');
     }
 
     create()
@@ -35,18 +36,31 @@ class Play extends Phaser.Scene {
             borderUISize*6.89,
             'player',
         ).setOrigin(0.5, 0);
+        enemy = new Enemy(this, game.config.width/10, borderUISize*6.89, 'enemy', 0).setOrigin(-3, 0.2);
+
 
 
         // Enable Physics
         this.physics.add.existing(ground);
         this.physics.add.existing(player);
+    
+       
 
         // Set world bounds 
         ground.body.setCollideWorldBounds(true);
         player.body.setCollideWorldBounds(true);
+        
+        
+        
+        
 
         // Collision between player & ground
         this.physics.add.collider(player, ground);
+        //collision between player & enemy
+        this.physics.add.collider(player,enemy, function(player,enemy){
+            
+        });        
+        
 
         // Initialize Keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);  
@@ -59,5 +73,23 @@ class Play extends Phaser.Scene {
         {
             player.body.setVelocityY(-400);
         }
+        enemy.x -= 3;
+        
+        if(this.checkCollision(player, enemy)) {
+            player.reset();
+              
+          }
+
     }
+    checkCollision(player,enemy){
+        if (player.x < enemy.x + enemy.width && 
+            player.x + player.width > enemy.x && 
+            player.y < enemy.y + enemy.height &&
+            player.height + player.y > enemy.y) {
+                return true;
+        } else {
+            return false;
+        }
+    }
+    
 }

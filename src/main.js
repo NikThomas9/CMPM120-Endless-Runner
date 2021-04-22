@@ -20,3 +20,4 @@ let borderPadding = borderUISize / 3;
 
 let keyUP;
 let player;
+let enemy;
