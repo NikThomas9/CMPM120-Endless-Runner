@@ -10,6 +10,6 @@ class Player extends Phaser.GameObjects.Sprite {
     }
 
     reset() {
-
+        this.alpha = 0;
     }
 }

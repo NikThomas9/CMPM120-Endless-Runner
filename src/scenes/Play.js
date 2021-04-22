@@ -43,24 +43,27 @@ class Play extends Phaser.Scene {
         // Enable Physics
         this.physics.add.existing(ground);
         this.physics.add.existing(player);
+        this.physics.add.existing(enemy);
     
        
 
         // Set world bounds 
         ground.body.setCollideWorldBounds(true);
-        player.body.setCollideWorldBounds(true);
+        player.body.setCollideWorldBounds(true);        
         
-        
-        
-        
+        gameOver = false;
 
         // Collision between player & ground
         this.physics.add.collider(player, ground);
         //collision between player & enemy
-        this.physics.add.collider(player,enemy, function(player,enemy){
-            
-        });        
-        
+        this.physics.add.collider(player,enemy, null, function ()
+        {
+            player.reset();
+            enemy.body.setVelocityX(0);
+            gameOver = true;
+        }
+        );
+        this.physics.add.collider(ground,enemy);
 
         // Initialize Keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);  
@@ -68,20 +71,25 @@ class Play extends Phaser.Scene {
 
     update()
     {
-        // Jump
-        if (Phaser.Input.Keyboard.JustDown(keyUP) && player.body.touching.down)
+        if (!gameOver)
         {
-            player.body.setVelocityY(-400);
+            // Jump
+            if (Phaser.Input.Keyboard.JustDown(keyUP) && player.body.touching.down)
+            {
+                player.body.setVelocityY(-400);
+            }
+
+            enemy.body.setVelocityX(-400);
+            console.log("playing");
         }
-        enemy.x -= 3;
         
-        if(this.checkCollision(player, enemy)) {
+        /*if(this.checkCollision(player, enemy)) {
             player.reset();
               
-          }
+          }*/
 
     }
-    checkCollision(player,enemy){
+    /*checkCollision(player,enemy){
         if (player.x < enemy.x + enemy.width && 
             player.x + player.width > enemy.x && 
             player.y < enemy.y + enemy.height &&
@@ -90,6 +98,5 @@ class Play extends Phaser.Scene {
         } else {
             return false;
         }
-    }
-    
+    }*/
 }
