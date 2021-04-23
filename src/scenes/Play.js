@@ -58,7 +58,9 @@ class Play extends Phaser.Scene {
         //Init enemy array
         this.enemyArray = [];
 
+        //Main Spawn System
         this.spawnClock = this.time.addEvent({
+            //TODO: Random delay
             delay: 3000,
             callback: () =>
             {
@@ -66,6 +68,7 @@ class Play extends Phaser.Scene {
                 if (!this.gameOver)
                 {
                     //create a new enemy
+                    //TODO: Random object spawn
                     this.spawn = new Enemy(this, game.config.width - 10, borderUISize*8, 'enemy', 0).setOrigin(0, 0.0);
 
                     //add local physics colliders to the new object
