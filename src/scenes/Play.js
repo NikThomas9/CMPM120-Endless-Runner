@@ -36,16 +36,13 @@ class Play extends Phaser.Scene {
             borderUISize*6.89,
             'player',
         ).setOrigin(0.5, 0);
-        this.enemy = new Enemy(this, game.config.width/10, borderUISize*6.89, 'enemy', 0).setOrigin(-3, 0.2);
+        //this.enemy = new Enemy(this, game.config.width/10, borderUISize*6.89, 'enemy', 0).setOrigin(-3, 0.2);
+        //this.enemyArray = [];
 
         // Enable Physics
-        this.add.existing(this.player);
         this.add.existing(this.ground);
-        this.add.existing(this.enemy);
 
         this.physics.add.existing(this.ground);
-        this.physics.add.existing(this.player);
-        this.physics.add.existing(this.enemy);
 
         // Set world bounds 
         this.ground.body.setCollideWorldBounds(true);
@@ -53,22 +50,41 @@ class Play extends Phaser.Scene {
         
         // Collision between objects with the ground
         this.physics.add.collider(this.player, this.ground);
-        this.physics.add.collider(this.ground,this.enemy);
+        //this.physics.add.collider(this.ground,this.enemy);
 
         // Set game over flag
         this.gameOver = false;
 
         //collision between player & enemy
-        this.physics.add.collider(
+        /*this.physics.add.collider(
             this.player,
             this.enemy, 
             () =>
             {
                 this.gameOver = true;
-            });
+            });*/
 
         // Initialize Keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);  
+
+        this.spawnClock = this.time.addEvent({
+            delay: 3000,
+            callback: () =>
+            {
+                this.spawn = new Enemy(this, game.config.width/4, borderUISize*6.89, 'enemy', 0).setOrigin(-3, 0.2);
+                this.physics.add.collider(this.ground,this.spawn);
+                this.physics.add.collider(
+                    this.player,
+                    this.spawn, 
+                    () =>
+                    {
+                        this.gameOver = true;
+                    });
+            },
+            callbackScope: this,
+            repeat: 5
+     
+        });
     }
 
     update()
@@ -80,13 +96,16 @@ class Play extends Phaser.Scene {
             {
                 this.player.body.setVelocityY(-400);
             }
-
-            this.enemy.body.setVelocityX(-400);
+            
+            if (this.spawn != null)
+            {
+                this.spawn.update();
+            }
         }
         else
         {
             this.player.reset();
-            this.enemy.body.setVelocityX(0);
+            this.spawn.destroy();
         }
     }
 
