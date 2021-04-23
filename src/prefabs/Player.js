@@ -15,7 +15,8 @@ class Player extends Phaser.GameObjects.Sprite {
     }
 
     reset() {
+        console.log("hit");
+        this.alive = true;
         this.alpha = 0;
-        this.alive = false;
     }
 }

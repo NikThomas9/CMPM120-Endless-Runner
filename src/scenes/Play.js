@@ -53,6 +53,7 @@ class Play extends Phaser.Scene {
 
         // Initialize Keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);  
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
         //Init enemy array
         this.enemyArray = [];
@@ -61,30 +62,39 @@ class Play extends Phaser.Scene {
             delay: 3000,
             callback: () =>
             {
-                //create a new enemy
-                this.spawn = new Enemy(this, game.config.width - 10, borderUISize*8, 'enemy', 0).setOrigin(0, 0.0);
+                //Spawn enemy if the game is still active
+                if (!this.gameOver)
+                {
+                    //create a new enemy
+                    this.spawn = new Enemy(this, game.config.width - 10, borderUISize*8, 'enemy', 0).setOrigin(0, 0.0);
 
-                //add local physics colliders to the new object
-                console.log("spawn");
-                this.physics.add.collider(this.ground,this.spawn);
-                this.physics.add.collider(
-                    this.player,
-                    this.spawn, 
-                    () =>
-                    {
-                        this.gameOver = true;
-                    });
+                    //add local physics colliders to the new object
+                    console.log("spawn");
+                    this.physics.add.collider(this.ground,this.spawn);
+                    this.physics.add.collider(
+                        this.player,
+                        this.spawn, 
+                        () =>
+                        {
+                            this.gameOver = true;
+                            this.player.alive = false;
+                        });
 
-                this.enemyArray.push(this.spawn);
+                    this.enemyArray.push(this.spawn);
+                } 
             },
             callbackScope: this,
-            loop: !this.gameOver
-     
+            loop: true
         });
     }
 
     update()
     {
+        //If game over, check input for restart
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.scene.restart();
+        }
+
         if (!this.gameOver)
         {
             // Jump
@@ -100,19 +110,12 @@ class Play extends Phaser.Scene {
         }
         else
         {
-            this.player.reset();
+            if (this.player.alive == false)
+            {
+                this.player.reset();
+            }
+
             this.enemyArray.forEach(enemy => enemy.destroy());
         }
     }
-
-    /*checkCollision(player,enemy){
-        if (player.x < enemy.x + enemy.width && 
-            player.x + player.width > enemy.x && 
-            player.y < enemy.y + enemy.height &&
-            player.height + player.y > enemy.y) {
-                return true;
-        } else {
-            return false;
-        }
-    }*/
 }
