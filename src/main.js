@@ -6,11 +6,11 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 700 },
-            debug: false 
-        },
-    },
-}
+            gravity: { y: 200 },
+            debug: false
+        }
+    }
+};
 
 
 let game = new Phaser.Game(config);
@@ -19,6 +19,5 @@ let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
 let keyUP;
-let player;
-let enemy;
+
 let gameOver;

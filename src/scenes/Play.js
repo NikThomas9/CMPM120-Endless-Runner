@@ -22,7 +22,7 @@ class Play extends Phaser.Scene {
             ).setOrigin(0,0);
 
         //Debug Ground Asset
-        var ground = this.add.rectangle(
+        this.ground = this.add.rectangle(
             0,
             borderUISize * 10,
             game.config.width,
@@ -30,40 +30,46 @@ class Play extends Phaser.Scene {
             0x917dd4,
             ).setOrigin(0,0);
 
-        player = new Player(
+        this.player = new Player(
             this,
             game.config.width/10,
             borderUISize*6.89,
             'player',
         ).setOrigin(0.5, 0);
-        enemy = new Enemy(this, game.config.width/10, borderUISize*6.89, 'enemy', 0).setOrigin(-3, 0.2);
+        this.enemy = new Enemy(this, game.config.width/10, borderUISize*6.89, 'enemy', 0).setOrigin(-3, 0.2);
 
 
 
         // Enable Physics
-        this.physics.add.existing(ground);
-        this.physics.add.existing(player);
-        this.physics.add.existing(enemy);
+        this.add.existing(this.player);
+        this.add.existing(this.ground);
+        this.add.existing(this.enemy);
+
+        this.physics.add.existing(this.ground);
+        this.physics.add.existing(this.player);
+        this.physics.add.existing(this.enemy);
     
        
 
         // Set world bounds 
-        ground.body.setCollideWorldBounds(true);
-        player.body.setCollideWorldBounds(true);        
+        this.ground.body.setCollideWorldBounds(true);
+        this.player.body.setCollideWorldBounds(true);        
         
-        gameOver = false;
+        this.gameOver = false;
 
         // Collision between player & ground
-        this.physics.add.collider(player, ground);
+        this.physics.add.collider(this.player, this.ground);
+
         //collision between player & enemy
-        this.physics.add.collider(player,enemy, null, function ()
-        {
-            player.reset();
-            enemy.body.setVelocityX(0);
-            gameOver = true;
-        }
-        );
-        this.physics.add.collider(ground,enemy);
+        this.physics.add.collider(
+            this.player,
+            this.enemy, 
+            function ()
+            {
+                gameOver = true;
+            });
+
+        this.physics.add.collider(this.ground,this.enemy);
 
         // Initialize Keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);  
@@ -74,21 +80,20 @@ class Play extends Phaser.Scene {
         if (!gameOver)
         {
             // Jump
-            if (Phaser.Input.Keyboard.JustDown(keyUP) && player.body.touching.down)
+            if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)
             {
-                player.body.setVelocityY(-400);
+                this.player.body.setVelocityY(-400);
             }
 
-            enemy.body.setVelocityX(-400);
-            console.log("playing");
+            this.enemy.body.setVelocityX(-400);
         }
-        
-        /*if(this.checkCollision(player, enemy)) {
-            player.reset();
-              
-          }*/
-
+        else
+        {
+            this.player.reset();
+            this.enemy.body.setVelocityX(0);
+        }
     }
+
     /*checkCollision(player,enemy){
         if (player.x < enemy.x + enemy.width && 
             player.x + player.width > enemy.x && 
