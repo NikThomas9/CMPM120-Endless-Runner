@@ -38,8 +38,6 @@ class Play extends Phaser.Scene {
         ).setOrigin(0.5, 0);
         this.enemy = new Enemy(this, game.config.width/10, borderUISize*6.89, 'enemy', 0).setOrigin(-3, 0.2);
 
-
-
         // Enable Physics
         this.add.existing(this.player);
         this.add.existing(this.ground);
@@ -48,28 +46,26 @@ class Play extends Phaser.Scene {
         this.physics.add.existing(this.ground);
         this.physics.add.existing(this.player);
         this.physics.add.existing(this.enemy);
-    
-       
 
         // Set world bounds 
         this.ground.body.setCollideWorldBounds(true);
         this.player.body.setCollideWorldBounds(true);        
         
-        this.gameOver = false;
-
-        // Collision between player & ground
+        // Collision between objects with the ground
         this.physics.add.collider(this.player, this.ground);
+        this.physics.add.collider(this.ground,this.enemy);
+
+        // Set game over flag
+        this.gameOver = false;
 
         //collision between player & enemy
         this.physics.add.collider(
             this.player,
             this.enemy, 
-            function ()
+            () =>
             {
-                gameOver = true;
+                this.gameOver = true;
             });
-
-        this.physics.add.collider(this.ground,this.enemy);
 
         // Initialize Keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);  
@@ -77,7 +73,7 @@ class Play extends Phaser.Scene {
 
     update()
     {
-        if (!gameOver)
+        if (!this.gameOver)
         {
             // Jump
             if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)

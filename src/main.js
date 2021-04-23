@@ -20,4 +20,4 @@ let borderPadding = borderUISize / 3;
 
 let keyUP;
 
-let gameOver;
+//let gameOver;
