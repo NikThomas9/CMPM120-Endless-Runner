@@ -30,7 +30,26 @@ class Play extends Phaser.Scene {
             borderUISize * 2.5,
             0x917dd4,
             0
-            ).setOrigin(0,0);          
+            ).setOrigin(0,0);     
+            
+        //Set starting score to 0
+        score = 0;
+
+        //Display score
+        let scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#917dd4',
+            color: '#000000',
+            align: 'center',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
+
+        this.scoreText = this.add.text(borderUISize + borderPadding/2, borderUISize + borderPadding/2, score, scoreConfig);
 
         this.player = new Player(
             this,
@@ -95,9 +114,17 @@ class Play extends Phaser.Scene {
 
     update()
     {
+        //console.log(this.checkCollision(this.player, this.scoreColl));
+        this.scoreText.text = score;
+
         //If game over, check input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
+            
+            //Debug way to check high score
+            //TODO: Display on Game Over screen
+            console.log(highScore);
+
         }
 
         if (!this.gameOver)
@@ -121,6 +148,12 @@ class Play extends Phaser.Scene {
             if (this.player.alive == false)
             {
                 this.player.reset();
+            }
+
+            //Update high score
+            if (score > highScore)
+            {
+                highScore = score;
             }
 
             this.enemyArray.forEach(enemy => enemy.destroy());

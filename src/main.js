@@ -20,4 +20,5 @@ let borderPadding = borderUISize / 3;
 
 let keyUP, keyR;
 
-//let gameOver;
+let score = 0;
+let highScore = 0;
