@@ -8,32 +8,34 @@ class Play extends Phaser.Scene {
         //Load Sprites
         this.load.image('player', 'assets/player.png');
         this.load.image('enemy', 'assets/obstacle1new.png');
+        this.load.image('cityscape', 'assets/CityBG.png');
     }
 
     create()
     {
         //Debug BG Asset
-        this.add.rectangle(
+        this.cityscape = this.add.tileSprite(
             0,
             0,
             game.config.width,
             game.config.height,
-            0xc3e2eb,
+            'cityscape',
             ).setOrigin(0,0);
 
-        //Debug Ground Asset
+        //Ground Physics Collider
         this.ground = this.add.rectangle(
             0,
-            borderUISize * 10,
+            borderUISize * 15,
             game.config.width,
-            borderUISize * 5,
+            borderUISize * 2.5,
             0x917dd4,
-            ).setOrigin(0,0);
+            0
+            ).setOrigin(0,0);          
 
         this.player = new Player(
             this,
             game.config.width/10,
-            borderUISize*6.89,
+            borderUISize*10,
             'player',
         ).setOrigin(0.5, 0);
 
@@ -69,7 +71,7 @@ class Play extends Phaser.Scene {
                 {
                     //create a new enemy
                     //TODO: Random object spawn
-                    this.spawn = new Enemy(this, game.config.width - 10, borderUISize*8, 'enemy', 0).setOrigin(0, 0.0);
+                    this.spawn = new Enemy(this, game.config.width - 10, borderUISize*10.5, 'enemy', 0).setOrigin(0, 0.0);
 
                     //add local physics colliders to the new object
                     console.log("spawn");
@@ -100,6 +102,9 @@ class Play extends Phaser.Scene {
 
         if (!this.gameOver)
         {
+            //Update scroll BG
+            this.cityscape.tilePositionX += 3;
+
             // Jump
             if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)
             {
