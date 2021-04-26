@@ -7,89 +7,156 @@ class Play extends Phaser.Scene {
     {
         //Load Sprites
         this.load.image('player', 'assets/player.png');
-        this.load.image('enemy', 'assets/obstacle1.png');
+        this.load.image('enemy', 'assets/obstacle1new.png');
+        this.load.image('cityscape', 'assets/CityBG.png');
     }
 
     create()
     {
         //Debug BG Asset
-        this.add.rectangle(
+        this.cityscape = this.add.tileSprite(
             0,
             0,
             game.config.width,
             game.config.height,
-            0xc3e2eb,
+            'cityscape',
             ).setOrigin(0,0);
 
-        //Debug Ground Asset
-        var ground = this.add.rectangle(
+        //Ground Physics Collider
+        this.ground = this.add.rectangle(
             0,
-            borderUISize * 10,
+            borderUISize * 15,
             game.config.width,
-            borderUISize * 5,
+            borderUISize * 2.5,
             0x917dd4,
-            ).setOrigin(0,0);
+            0
+            ).setOrigin(0,0);     
+            
+        //Set starting score to 0
+        score = 0;
 
-        player = new Player(
+        //Display score
+        let scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#917dd4',
+            color: '#000000',
+            align: 'center',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
+
+        this.scoreText = this.add.text(borderUISize + borderPadding/2, borderUISize + borderPadding/2, score, scoreConfig);
+
+        this.player = new Player(
             this,
             game.config.width/10,
-            borderUISize*6.89,
+            borderUISize*10,
             'player',
         ).setOrigin(0.5, 0);
-        enemy = new Enemy(this, game.config.width/10, borderUISize*6.89, 'enemy', 0).setOrigin(-3, 0.2);
 
-
-
-        // Enable Physics
-        this.physics.add.existing(ground);
-        this.physics.add.existing(player);
-    
-       
+        // Enable Physics for ground instance
+        this.add.existing(this.ground);
+        this.physics.add.existing(this.ground);
 
         // Set world bounds 
-        ground.body.setCollideWorldBounds(true);
-        player.body.setCollideWorldBounds(true);
+        this.ground.body.setCollideWorldBounds(true);
+        this.player.body.setCollideWorldBounds(true);        
         
-        
-        
-        
+        // Collision between objects with the ground
+        this.physics.add.collider(this.player, this.ground);
 
-        // Collision between player & ground
-        this.physics.add.collider(player, ground);
-        //collision between player & enemy
-        this.physics.add.collider(player,enemy, function(player,enemy){
-            
-        });        
-        
+        // Set game over flag
+        this.gameOver = false;
 
         // Initialize Keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);  
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+
+        //Init enemy array
+        this.enemyArray = [];
+
+        //Main Spawn System
+        this.spawnClock = this.time.addEvent({
+            //TODO: Random delay
+            delay: 3000,
+            callback: () =>
+            {
+                //Spawn enemy if the game is still active
+                if (!this.gameOver)
+                {
+                    //create a new enemy
+                    //TODO: Random object spawn
+                    this.spawn = new Enemy(this, game.config.width - 10, borderUISize*10.5, 'enemy', 0).setOrigin(0, 0.0);
+
+                    //add local physics colliders to the new object
+                    console.log("spawn");
+                    this.physics.add.collider(this.ground,this.spawn);
+                    this.physics.add.collider(
+                        this.player,
+                        this.spawn, 
+                        () =>
+                        {
+                            this.gameOver = true;
+                            this.player.alive = false;
+                        });
+
+                    this.enemyArray.push(this.spawn);
+                } 
+            },
+            callbackScope: this,
+            loop: true
+        });
     }
 
     update()
     {
-        // Jump
-        if (Phaser.Input.Keyboard.JustDown(keyUP) && player.body.touching.down)
-        {
-            player.body.setVelocityY(-400);
-        }
-        enemy.x -= 3;
-        
-        if(this.checkCollision(player, enemy)) {
-            player.reset();
-              
-          }
+        //console.log(this.checkCollision(this.player, this.scoreColl));
+        this.scoreText.text = score;
 
-    }
-    checkCollision(player,enemy){
-        if (player.x < enemy.x + enemy.width && 
-            player.x + player.width > enemy.x && 
-            player.y < enemy.y + enemy.height &&
-            player.height + player.y > enemy.y) {
-                return true;
-        } else {
-            return false;
+        //If game over, check input for restart
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.scene.restart();
+            
+            //Debug way to check high score
+            //TODO: Display on Game Over screen
+            console.log(highScore);
+
+        }
+
+        if (!this.gameOver)
+        {
+            //Update scroll BG
+            this.cityscape.tilePositionX += 3;
+
+            // Jump
+            if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)
+            {
+                this.player.body.setVelocityY(-650);
+            }
+            
+            if (this.enemyArray.length != 0)
+            {
+                this.enemyArray.forEach(enemy => enemy.update());
+            }
+        }
+        else
+        {
+            if (this.player.alive == false)
+            {
+                this.player.reset();
+            }
+
+            //Update high score
+            if (score > highScore)
+            {
+                highScore = score;
+            }
+
+            this.enemyArray.forEach(enemy => enemy.destroy());
         }
     }
-    
 }
