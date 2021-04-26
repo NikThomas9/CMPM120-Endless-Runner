@@ -1,10 +1,8 @@
-class Enemy extends Phaser.GameObjects.Sprite{
-    constructor(scene, x, y, texture, frame){
-        super(scene, x, y, texture, frame);
+class Enemy extends Phaser.Physics.Arcade.Sprite{
+    constructor(scene, x, y){
+        super(scene, x, y, 'enemy');
         scene.add.existing(this);
         scene.physics.add.existing(this);
-        this.body.setVelocityX(-500);
-        this.alive = true;
     }
 
     update(){
@@ -18,7 +16,18 @@ class Enemy extends Phaser.GameObjects.Sprite{
     reset() {
         this.destroy();
         this.alive = false;
-        //this.x = game.config.width + 50;
-        //this.alpha = 1;
+    }
+
+    spawn()
+    {
+        this.alive = true;
+
+        this.x = game.config.width - 10;
+        this.y = borderUISize*10.5;
+
+        this.setActive(true);
+        this.setVisible(true);
+
+        this.setVelocityX(-500);
     }
 }

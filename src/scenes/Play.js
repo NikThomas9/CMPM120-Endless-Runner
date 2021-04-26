@@ -29,7 +29,7 @@ class Play extends Phaser.Scene {
             game.config.width,
             borderUISize * 2.5,
             0x917dd4,
-            0
+            1
             ).setOrigin(0,0);     
             
         //Set starting score to 0
@@ -78,10 +78,20 @@ class Play extends Phaser.Scene {
 
         //Init enemy array
         this.enemyArray = [];
+            
+        this.enemyGroup = this.physics.add.group();
+
+        this.enemyGroup.config = {
+            classType: Enemy,
+            active: true,
+        };
+
+        this.physics.add.collider(this.enemyGroup, this.ground);
+
+        
 
         //Main Spawn System
         this.spawnClock = this.time.addEvent({
-            //TODO: Random delay
             delay: Phaser.Math.Between(2000, 3000),
             callback: () =>
             {
@@ -90,21 +100,11 @@ class Play extends Phaser.Scene {
                 {
                     //create a new enemy
                     //TODO: Random object spawn
-                    this.spawn = new Enemy(this, game.config.width - 10, borderUISize*10.5, 'enemy', 0).setOrigin(0, 0.0);
-
-                    //add local physics colliders to the new object
-                    console.log("spawn");
-                    this.physics.add.collider(this.ground,this.spawn);
-                    this.physics.add.collider(
-                        this.player,
-                        this.spawn, 
-                        () =>
-                        {
-                            this.gameOver = true;
-                            this.player.alive = false;
-                        });
-
-                    this.enemyArray.push(this.spawn);
+                    this.spawn = this.enemyGroup.add(Enemy);
+                    this.physics.add.existing(this.spawn);
+                    console.log(this.spawn);
+                    //this.spawn.spawn();
+                    //this.enemyGroup.spawnEnemy();
 
                     //Update delay 
                     this.spawnClock.delay = Phaser.Math.Between(2000, 3000);
@@ -113,6 +113,23 @@ class Play extends Phaser.Scene {
             callbackScope: this,
             loop: true
         });
+
+        this.physics.add.collider(
+            this.ground,
+            this.enemyGroup, 
+            () =>
+            {
+                console.log("hit");
+            });
+
+        this.physics.add.collider(
+            this.player,
+            this.enemyGroup, 
+            () =>
+            {
+                this.gameOver = true;
+                this.player.alive = false;
+            });
     }
 
     update()
@@ -142,7 +159,7 @@ class Play extends Phaser.Scene {
             
             if (this.enemyArray.length != 0)
             {
-                this.enemyArray.forEach(enemy => enemy.update());
+                //this.enemyArray.forEach(enemy => enemy.update());
             }
         }
         else
@@ -158,7 +175,7 @@ class Play extends Phaser.Scene {
                 highScore = score;
             }
 
-            this.enemyArray.forEach(enemy => enemy.destroy());
+            //this.enemyArray.forEach(enemy => enemy.destroy());
         }
     }
 }
