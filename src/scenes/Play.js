@@ -82,7 +82,7 @@ class Play extends Phaser.Scene {
         //Main Spawn System
         this.spawnClock = this.time.addEvent({
             //TODO: Random delay
-            delay: 3000,
+            delay: Phaser.Math.Between(2000, 3000),
             callback: () =>
             {
                 //Spawn enemy if the game is still active
@@ -105,6 +105,9 @@ class Play extends Phaser.Scene {
                         });
 
                     this.enemyArray.push(this.spawn);
+
+                    //Update delay 
+                    this.spawnClock.delay = Phaser.Math.Between(2000, 3000);
                 } 
             },
             callbackScope: this,
@@ -114,7 +117,6 @@ class Play extends Phaser.Scene {
 
     update()
     {
-        //console.log(this.checkCollision(this.player, this.scoreColl));
         this.scoreText.text = score;
 
         //If game over, check input for restart
