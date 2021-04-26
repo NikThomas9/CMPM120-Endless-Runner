@@ -93,13 +93,13 @@ class Play extends Phaser.Scene {
                     this.spawn = new Enemy(this, game.config.width - 10, borderUISize*10.5, 'enemy', 0).setOrigin(0, 0.0);
 
                     //add local physics colliders to the new object
-                    console.log("spawn");
                     this.physics.add.collider(this.ground,this.spawn);
                     this.physics.add.collider(
                         this.player,
                         this.spawn, 
                         () =>
                         {
+                            console.log(this.enemyArray.length);
                             this.gameOver = true;
                             this.player.alive = false;
                         });
@@ -143,6 +143,12 @@ class Play extends Phaser.Scene {
             if (this.enemyArray.length != 0)
             {
                 this.enemyArray.forEach(enemy => enemy.update());
+                this.enemyArray.forEach(enemy => {
+                    if (enemy.alive == false)
+                    {
+                        this.enemyArray.splice(this.enemyArray.indexOf(enemy));
+                    }
+                });
             }
         }
         else
