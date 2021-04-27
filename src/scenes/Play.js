@@ -178,6 +178,7 @@ class Play extends Phaser.Scene {
                 this.add.text(game.config.width/2, game.config.height/2 + 75, 'HIGH SCORE: ' + highScore,gameoverConfig).setOrigin(0.5);
                 
                 this.player.reset();
+                this.enemyGroup.getChildren().forEach(enemy => enemy.reset());
             }
 
         }
