@@ -7,7 +7,9 @@ class Play extends Phaser.Scene {
     {
         //Load Sprites
         this.load.image('player', 'assets/player.png');
-        this.load.image('enemy', 'assets/obstacle1new.png');
+        this.load.image('enemy1', 'assets/obstacle1.png');
+        this.load.image('enemy2', 'assets/obstacle2.png');
+        this.load.image('enemy3', 'assets/obstacle3.png');
         this.load.image('cityscape', 'assets/CityBG.png');
     }
 
@@ -79,6 +81,8 @@ class Play extends Phaser.Scene {
         //Init enemy array
         this.enemyArray = [];
 
+        this.enemyTypes = ["enemy1", "enemy2", "enemy3"];
+
 
         //Main Spawn System
         this.spawnClock = this.time.addEvent({
@@ -90,9 +94,29 @@ class Play extends Phaser.Scene {
                 if (!this.gameOver)
                 {
                     //create a new enemy
-                    //TODO: Random object spawn
-                    this.spawn = new Enemy(this, game.config.width - 10, borderUISize*10.5, 'enemy', 0).setOrigin(0, 0.0);
+                    switch (this.enemyTypes[Phaser.Math.Between(0, 2)]) {
+                        case "enemy1":
+                            this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1').setOrigin(0, 0.0);
+                            break;
+                            
+                        case "enemy2":
+                            this.spawn = new enemy2(this, game.config.width - 10, borderUISize*10.5, 'enemy2').setOrigin(0, 0.0);
+                            break;
 
+                        case "enemy3":
+                            this.spawn = new enemy3(this, game.config.width - 10, borderUISize*10.5, 'enemy3').setOrigin(0, 0.0);
+                            break;
+                    }
+
+                    this.physics.add.collider(this.spawn,this.ground);
+                    this.physics.add.collider(
+                        this.player,
+                        this.spawn, 
+                        () =>
+                        {
+                            this.gameOver = true;
+                            this.player.alive = false;
+                        });
                     this.enemyArray.push(this.spawn);
 
                     //Update delay 
@@ -104,7 +128,7 @@ class Play extends Phaser.Scene {
         });
 
         //Create colliders for all enemies
-        this.physics.add.collider(this.enemyArray,this.ground);
+        /*this.physics.add.collider(this.enemyArray,this.ground);
         this.physics.add.collider(
             this.player,
             this.enemyArray, 
@@ -112,9 +136,7 @@ class Play extends Phaser.Scene {
             {
                 this.gameOver = true;
                 this.player.alive = false;
-            });
-
-        
+            });*/
     }
 
     update()
