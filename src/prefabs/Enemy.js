@@ -22,11 +22,9 @@ class Enemy extends Phaser.GameObjects.Sprite{
     reset() {
 
         this.enemyGroup.remove(this);
+        this.setVisible(false);
         this.destroy();
         this.alive = false;
-        
-        //this.x = game.config.width + 50;
-        //this.alpha = 1;
     }
 
     setSpeed()
