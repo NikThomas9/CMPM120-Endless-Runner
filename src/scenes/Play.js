@@ -142,10 +142,20 @@ class Play extends Phaser.Scene {
     update()
     {
         this.scoreText.text = score;
+        if (score > highScore)
+        {
+            highScore = score;
+        }
 
         //If game over, check input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+
+
+            
             this.scene.restart();
+
+
+            
             
             //Debug way to check high score
             //TODO: Display on Game Over screen
@@ -191,16 +201,23 @@ class Play extends Phaser.Scene {
                     },
                     fixedWidth: 0
                 }
-                this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER',gameOVerConfig).setOrigin(0.5);
+                this.add.text(game.config.width/2, game.config.height/2 + 15, 'GAME OVER',gameOVerConfig).setOrigin(0.5);
                 this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart',gameOVerConfig).setOrigin(0.5);
+                this.add.text(game.config.width/2, game.config.height/2 + 110, 'HIGH SCORE:',gameOVerConfig).setOrigin(0.5);
+                this.add.text(game.config.width/2 + 97, game.config.height/2 + 110, highScore.toString(),gameOVerConfig).setOrigin(0.5);
+                
+                
+                
+
+                //display high score
                 this.player.reset();
             }
 
             //Update high score
-            if (score > highScore)
-            {
-                highScore = score;
-            }
+            // if (score > highScore)
+            // {
+            //     highScore = score;
+            // }
 
             this.enemyArray.forEach(enemy => enemy.destroy());
         }
