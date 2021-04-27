@@ -93,9 +93,23 @@ class Play extends Phaser.Scene {
                 //Spawn enemy if the game is still active
                 if (!this.gameOver)
                 {
+                    // let rand = Math.random(Math.random() * 3);
+                    // if(rand == 0){
+                    //     this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1').setOrigin(0, 0.0);
+                    //     this.spawn2 = new enemy2(this, game.config.width - 10, borderUISize*10.5, 'enemy2').setOrigin(0, 0.0);
+
+                    // }
+                    // else if(rand == 2){
+                    //     this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1').setOrigin(0, 0.0);
+                    //     this.spawn2 = new enemy2(this, game.config.width - 10, borderUISize*10.5, 'enem3').setOrigin(0, 0.0);
+                    // }
+                    // else{
+                    //     this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy2').setOrigin(0, 0.0);
+                    //     this.spawn2 = new enemy2(this, game.config.width - 10, borderUISize*10.5, 'enemy3').setOrigin(0, 0.0);
+                    // }
                     //create a new enemy
                     switch (this.enemyTypes[Phaser.Math.Between(0, 2)]) {
-                        case "enemy1":
+                        case "enemy1" && "enemy2":
                             this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1').setOrigin(0, 0.0);
                             break;
                             
@@ -106,21 +120,25 @@ class Play extends Phaser.Scene {
                         case "enemy3":
                             this.spawn = new enemy3(this, game.config.width - 10, borderUISize*10.5, 'enemy3').setOrigin(0, 0.0);
                             break;
+
                     }
 
                     this.physics.add.collider(this.spawn,this.ground);
+                    // this.physics.add.collider(this.spawn2,this.ground);
                     this.physics.add.collider(
                         this.player,
                         this.spawn, 
+                        // this.spawn2,
                         () =>
                         {
                             this.gameOver = true;
                             this.player.alive = false;
                         });
                     this.enemyArray.push(this.spawn);
+                    // this.enemyArray.push(this.spawn2);
 
                     //Update delay 
-                    this.spawnClock.delay = Phaser.Math.Between(2000, 3000);
+                    this.spawnClock.delay = Phaser.Math.Between(1000, 2000);
                 } 
             },
             callbackScope: this,
@@ -172,6 +190,7 @@ class Play extends Phaser.Scene {
             if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)
             {
                 this.player.body.setVelocityY(-650);
+
             }
             
             if (this.enemyArray.length != 0)
@@ -180,6 +199,7 @@ class Play extends Phaser.Scene {
                 this.enemyArray.forEach(enemy => {
                     if (enemy.alive == false)
                     {
+                        
                         this.enemyArray.splice(this.enemyArray.indexOf(enemy));
                     }
                 });

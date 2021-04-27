@@ -5,6 +5,7 @@ class Enemy extends Phaser.GameObjects.Sprite{
         scene.physics.add.existing(this);
         this.body.setVelocityX(-500);
         this.alive = true;
+        
     }
 
     update(){
