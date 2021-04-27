@@ -78,9 +78,7 @@ class Play extends Phaser.Scene {
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);  
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
-        //Init enemy array
-        this.enemyArray = [];
-
+        //Create Enemy Group
         this.enemyGroup = this.physics.add.group();
         this.physics.add.collider(this.enemyGroup, this.ground);
         this.physics.add.collider(
@@ -119,8 +117,6 @@ class Play extends Phaser.Scene {
                             break;
                     }
 
-                    this.enemyArray.push(this.spawn);
-
                     //Update delay 
                     this.spawnClock.delay = Phaser.Math.Between(2000, 3000);
                 } 
@@ -150,15 +146,9 @@ class Play extends Phaser.Scene {
                 this.player.body.setVelocityY(-650);
             }
             
-            if (this.enemyArray.length != 0)
+            if (this.enemyGroup.getLength() != 0)
             {
-                this.enemyArray.forEach(enemy => enemy.update());
-                this.enemyArray.forEach(enemy => {
-                    if (enemy.alive == false)
-                    {
-                        this.enemyArray.splice(this.enemyArray.indexOf(enemy), 1);
-                    }
-                });
+                this.enemyGroup.getChildren().forEach(enemy => enemy.update());
             }
         }
         else
@@ -190,7 +180,6 @@ class Play extends Phaser.Scene {
                 this.player.reset();
             }
 
-            this.enemyArray.forEach(enemy => enemy.destroy());
         }
     }
 }

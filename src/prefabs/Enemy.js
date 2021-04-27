@@ -4,7 +4,8 @@ class Enemy extends Phaser.GameObjects.Sprite{
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
-        enemyGroup.add(this);   
+        this.enemyGroup = enemyGroup
+        this.enemyGroup.add(this);   
 
         this.alive = true;
         this.setSpeed();
@@ -19,8 +20,11 @@ class Enemy extends Phaser.GameObjects.Sprite{
     }
 
     reset() {
+
+        this.enemyGroup.remove(this);
         this.destroy();
         this.alive = false;
+        
         //this.x = game.config.width + 50;
         //this.alpha = 1;
     }
