@@ -179,6 +179,20 @@ class Play extends Phaser.Scene {
         {
             if (this.player.alive == false)
             {
+                let gameOVerConfig = {
+                    fontFamily: 'Courier',
+                    fontSize: '28px',
+                    backgroundColor: '#ff0000',
+                    color: '#FFF',
+                    align: 'right',
+                    padding: {
+                        top: 5,
+                        bottom: 5,
+                    },
+                    fixedWidth: 0
+                }
+                this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER',gameOVerConfig).setOrigin(0.5);
+                this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart',gameOVerConfig).setOrigin(0.5);
                 this.player.reset();
             }
 
