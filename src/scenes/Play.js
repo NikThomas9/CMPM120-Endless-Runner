@@ -93,23 +93,9 @@ class Play extends Phaser.Scene {
                 //Spawn enemy if the game is still active
                 if (!this.gameOver)
                 {
-                    // let rand = Math.random(Math.random() * 3);
-                    // if(rand == 0){
-                    //     this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1').setOrigin(0, 0.0);
-                    //     this.spawn2 = new enemy2(this, game.config.width - 10, borderUISize*10.5, 'enemy2').setOrigin(0, 0.0);
-
-                    // }
-                    // else if(rand == 2){
-                    //     this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1').setOrigin(0, 0.0);
-                    //     this.spawn2 = new enemy2(this, game.config.width - 10, borderUISize*10.5, 'enem3').setOrigin(0, 0.0);
-                    // }
-                    // else{
-                    //     this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy2').setOrigin(0, 0.0);
-                    //     this.spawn2 = new enemy2(this, game.config.width - 10, borderUISize*10.5, 'enemy3').setOrigin(0, 0.0);
-                    // }
                     //create a new enemy
                     switch (this.enemyTypes[Phaser.Math.Between(0, 2)]) {
-                        case "enemy1" && "enemy2":
+                        case "enemy1":
                             this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1').setOrigin(0, 0.0);
                             break;
                             
@@ -124,21 +110,18 @@ class Play extends Phaser.Scene {
                     }
 
                     this.physics.add.collider(this.spawn,this.ground);
-                    // this.physics.add.collider(this.spawn2,this.ground);
                     this.physics.add.collider(
                         this.player,
                         this.spawn, 
-                        // this.spawn2,
                         () =>
                         {
                             this.gameOver = true;
                             this.player.alive = false;
                         });
                     this.enemyArray.push(this.spawn);
-                    // this.enemyArray.push(this.spawn2);
 
                     //Update delay 
-                    this.spawnClock.delay = Phaser.Math.Between(1000, 2000);
+                    this.spawnClock.delay = Phaser.Math.Between(2000, 3000);
                 } 
             },
             callbackScope: this,
@@ -166,19 +149,8 @@ class Play extends Phaser.Scene {
         }
 
         //If game over, check input for restart
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
-
-
-            
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {  
             this.scene.restart();
-
-
-            
-            
-            //Debug way to check high score
-            //TODO: Display on Game Over screen
-            console.log(highScore);
-
         }
 
         if (!this.gameOver)
@@ -224,10 +196,7 @@ class Play extends Phaser.Scene {
                 this.add.text(game.config.width/2, game.config.height/2 + 15, 'GAME OVER',gameOVerConfig).setOrigin(0.5);
                 this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart',gameOVerConfig).setOrigin(0.5);
                 this.add.text(game.config.width/2, game.config.height/2 + 110, 'HIGH SCORE:',gameOVerConfig).setOrigin(0.5);
-                this.add.text(game.config.width/2 + 97, game.config.height/2 + 110, highScore.toString(),gameOVerConfig).setOrigin(0.5);
-                
-                
-                
+                this.add.text(game.config.width/2 + 97, game.config.height/2 + 110, highScore.toString(),gameOVerConfig).setOrigin(0.5);            
 
                 //display high score
                 this.player.reset();
