@@ -12,6 +12,5 @@ class enemy3 extends Enemy
 
     reset() {
         super.reset();
-        
     }
 }

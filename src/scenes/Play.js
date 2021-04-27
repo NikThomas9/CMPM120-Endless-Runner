@@ -81,6 +81,17 @@ class Play extends Phaser.Scene {
         //Init enemy array
         this.enemyArray = [];
 
+        this.enemyGroup = this.physics.add.group();
+        this.physics.add.collider(this.enemyGroup, this.ground);
+        this.physics.add.collider(
+            this.player,
+            this.enemyGroup, 
+            () =>
+            {
+                this.gameOver = true;
+                this.player.alive = false;
+            });
+
         this.enemyTypes = ["enemy1", "enemy2", "enemy3"];
 
 
@@ -97,56 +108,37 @@ class Play extends Phaser.Scene {
                     switch (this.enemyTypes[Phaser.Math.Between(0, 2)]) {
                         case "enemy1":
                             this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1').setOrigin(0, 0.0);
+                            this.enemyGroup.add(this.spawn);
+                            this.spawn.body.setVelocityX(-500);
                             break;
                             
                         case "enemy2":
                             this.spawn = new enemy2(this, game.config.width - 10, borderUISize*10.5, 'enemy2').setOrigin(0, 0.0);
+                            this.enemyGroup.add(this.spawn);
+                            this.spawn.body.setVelocityX(-500);
                             break;
 
                         case "enemy3":
                             this.spawn = new enemy3(this, game.config.width - 10, borderUISize*10.5, 'enemy3').setOrigin(0, 0.0);
+                            this.enemyGroup.add(this.spawn);
+                            this.spawn.body.setVelocityX(-500);
                             break;
-
                     }
 
-                    this.physics.add.collider(this.spawn,this.ground);
-                    this.physics.add.collider(
-                        this.player,
-                        this.spawn, 
-                        () =>
-                        {
-                            this.gameOver = true;
-                            this.player.alive = false;
-                        });
                     this.enemyArray.push(this.spawn);
 
                     //Update delay 
-                    this.spawnClock.delay = Phaser.Math.Between(2000, 3000);
+                    this.spawnClock.delay = Phaser.Math.Between(1000, 2000);
                 } 
             },
             callbackScope: this,
             loop: true
         });
-
-        //Create colliders for all enemies
-        /*this.physics.add.collider(this.enemyArray,this.ground);
-        this.physics.add.collider(
-            this.player,
-            this.enemyArray, 
-            () =>
-            {
-                this.gameOver = true;
-                this.player.alive = false;
-            });*/
     }
 
     update()
     {
         this.scoreText.text = score;
-        if (score > highScore)
-        {
-            highScore = score;
-        }
 
         //If game over, check input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {  
@@ -171,7 +163,6 @@ class Play extends Phaser.Scene {
                 this.enemyArray.forEach(enemy => {
                     if (enemy.alive == false)
                     {
-                        
                         this.enemyArray.splice(this.enemyArray.indexOf(enemy));
                     }
                 });
@@ -179,13 +170,19 @@ class Play extends Phaser.Scene {
         }
         else
         {
+            //Update high score
+            if (score > highScore)
+            {
+                 highScore = score;
+            }
+
             if (this.player.alive == false)
             {
-                let gameOVerConfig = {
+                let gameoverConfig = {
                     fontFamily: 'Courier',
                     fontSize: '28px',
-                    backgroundColor: '#ff0000',
-                    color: '#FFF',
+                    backgroundColor: '#FFC0CB',
+                    color: '#843605',
                     align: 'right',
                     padding: {
                         top: 5,
@@ -193,20 +190,12 @@ class Play extends Phaser.Scene {
                     },
                     fixedWidth: 0
                 }
-                this.add.text(game.config.width/2, game.config.height/2 + 15, 'GAME OVER',gameOVerConfig).setOrigin(0.5);
-                this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart',gameOVerConfig).setOrigin(0.5);
-                this.add.text(game.config.width/2, game.config.height/2 + 110, 'HIGH SCORE:',gameOVerConfig).setOrigin(0.5);
-                this.add.text(game.config.width/2 + 97, game.config.height/2 + 110, highScore.toString(),gameOVerConfig).setOrigin(0.5);            
-
-                //display high score
+                this.add.text(game.config.width/2, game.config.height/2 - 15, 'Game Over!',gameoverConfig).setOrigin(0.5);
+                this.add.text(game.config.width/2, game.config.height/2 + 30, 'Press (R) to Restart',gameoverConfig).setOrigin(0.5);
+                this.add.text(game.config.width/2, game.config.height/2 + 75, 'HIGH SCORE: ' + highScore,gameoverConfig).setOrigin(0.5);
+                
                 this.player.reset();
             }
-
-            //Update high score
-            // if (score > highScore)
-            // {
-            //     highScore = score;
-            // }
 
             this.enemyArray.forEach(enemy => enemy.destroy());
         }
