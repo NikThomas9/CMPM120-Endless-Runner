@@ -97,7 +97,7 @@ class Play extends Phaser.Scene {
 
         //Main Spawn System
         this.spawnClock = this.time.addEvent({
-            //TODO: Random delay
+
             delay: Phaser.Math.Between(2000, 3000),
             callback: () =>
             {
@@ -107,28 +107,22 @@ class Play extends Phaser.Scene {
                     //create a new enemy
                     switch (this.enemyTypes[Phaser.Math.Between(0, 2)]) {
                         case "enemy1":
-                            this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1').setOrigin(0, 0.0);
-                            this.enemyGroup.add(this.spawn);
-                            this.spawn.body.setVelocityX(-500);
+                            this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1', null, this.enemyGroup).setOrigin(0, 0.0);
                             break;
                             
                         case "enemy2":
-                            this.spawn = new enemy2(this, game.config.width - 10, borderUISize*10.5, 'enemy2').setOrigin(0, 0.0);
-                            this.enemyGroup.add(this.spawn);
-                            this.spawn.body.setVelocityX(-500);
+                            this.spawn = new enemy2(this, game.config.width - 10, borderUISize*10.5, 'enemy2', null, this.enemyGroup).setOrigin(0, 0.0);
                             break;
 
                         case "enemy3":
-                            this.spawn = new enemy3(this, game.config.width - 10, borderUISize*10.5, 'enemy3').setOrigin(0, 0.0);
-                            this.enemyGroup.add(this.spawn);
-                            this.spawn.body.setVelocityX(-500);
+                            this.spawn = new enemy3(this, game.config.width - 10, borderUISize*10.5, 'enemy3', null, this.enemyGroup).setOrigin(0, 0.0);
                             break;
                     }
 
                     this.enemyArray.push(this.spawn);
 
                     //Update delay 
-                    this.spawnClock.delay = Phaser.Math.Between(1000, 2000);
+                    this.spawnClock.delay = Phaser.Math.Between(2000, 3000);
                 } 
             },
             callbackScope: this,
@@ -154,7 +148,6 @@ class Play extends Phaser.Scene {
             if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)
             {
                 this.player.body.setVelocityY(-650);
-
             }
             
             if (this.enemyArray.length != 0)
@@ -163,7 +156,7 @@ class Play extends Phaser.Scene {
                 this.enemyArray.forEach(enemy => {
                     if (enemy.alive == false)
                     {
-                        this.enemyArray.splice(this.enemyArray.indexOf(enemy));
+                        this.enemyArray.splice(this.enemyArray.indexOf(enemy), 1);
                     }
                 });
             }

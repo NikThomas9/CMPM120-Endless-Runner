@@ -1,9 +1,7 @@
 class enemy2 extends Enemy
 {
-    constructor(scene, x, y, texture, frame){
-        super(scene, x, y, texture, frame);
-        scene.physics.add.existing(this);
-        this.body.setVelocityX(-300);
+    constructor(scene, x, y, texture, frame, enemyGroup){
+        super(scene, x, y, texture, frame, enemyGroup);
     }
 
     update(){
@@ -12,5 +10,10 @@ class enemy2 extends Enemy
 
     reset() {
         super.reset();
+    }
+
+    setSpeed()
+    {
+        this.body.setVelocityX(-550);
     }
 }

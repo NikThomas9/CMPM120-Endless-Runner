@@ -1,11 +1,13 @@
 class Enemy extends Phaser.GameObjects.Sprite{
-    constructor(scene, x, y, texture, frame){
-        super(scene, x, y, texture, frame);
+    constructor(scene, x, y, texture, frame, enemyGroup){
+        super(scene, x, y, texture, frame, enemyGroup);
         scene.add.existing(this);
         scene.physics.add.existing(this);
-        this.body.setVelocityX(-500);
+
+        enemyGroup.add(this);   
+
         this.alive = true;
-        
+        this.setSpeed();
     }
 
     update(){
@@ -22,4 +24,10 @@ class Enemy extends Phaser.GameObjects.Sprite{
         //this.x = game.config.width + 50;
         //this.alpha = 1;
     }
+
+    setSpeed()
+    {
+        this.body.setVelocityX(-500);
+    }
+
 }
