@@ -14,6 +14,7 @@ class enemy2 extends Enemy
 
     setSpeed()
     {
+        
         this.body.setVelocityX(-550);
     }
 }
