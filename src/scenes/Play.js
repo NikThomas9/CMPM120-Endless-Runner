@@ -34,8 +34,6 @@ class Play extends Phaser.Scene {
             0
             ).setOrigin(0,0);     
             
-        //Set starting score to 0
-        score = 0;
 
         //Display score
         let scoreConfig = {
@@ -155,7 +153,7 @@ class Play extends Phaser.Scene {
             if (score >= pointsToWin)
             {
                 this.scene.start("successScene");
-                pointsToWin += 5;
+                pointsToWin = score + pointsToWin + 5;
                 levelNumber++;
             }
         }
@@ -190,6 +188,7 @@ class Play extends Phaser.Scene {
 
                 levelNumber = 1;
                 pointsToWin = startingPoints;
+                score = 0;
             }
 
         }
