@@ -7,8 +7,8 @@ class Play extends Phaser.Scene {
     {
         //Load Sprites
         this.load.image('player', 'assets/PlayerTest.png');
-        this.load.image('enemy1', 'assets/obstacle1.png');
-        this.load.image('enemy2', 'assets/obstacle2.png');
+        this.load.image('enemy1', 'assets/obstacle_pigeon.png');
+        this.load.image('enemy2', 'assets/obstacle_vending.png');
         this.load.image('enemy3', 'assets/obstacle3.png');
         this.load.image('cityscape', 'assets/CityBG.png');
     }
@@ -107,7 +107,7 @@ class Play extends Phaser.Scene {
                             break;
                             
                         case "enemy2":
-                            this.spawn = new enemy2(this, game.config.width - 10, borderUISize*10.5, 'enemy2', null, this.enemyGroup).setOrigin(0, 0.0);
+                            this.spawn = new enemy2(this, game.config.width - 10, borderUISize*8.5, 'enemy2', null, this.enemyGroup).setOrigin(0, 0.0);
                             break;
 
                         case "enemy3":
