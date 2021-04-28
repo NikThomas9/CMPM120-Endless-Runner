@@ -6,7 +6,7 @@ class Play extends Phaser.Scene {
     preload()
     {
         //Load Sprites
-        this.load.image('player', 'assets/Player.png');
+        this.load.image('player', 'assets/PlayerTest.png');
         this.load.image('enemy1', 'assets/obstacle1.png');
         this.load.image('enemy2', 'assets/obstacle2.png');
         this.load.image('enemy3', 'assets/obstacle3.png');
