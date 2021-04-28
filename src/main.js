@@ -4,7 +4,7 @@ let config = {
     type: Phaser.CANVAS,
     width: 640,
     height: 480,
-    scene:  [Menu, Play],
+    scene:  [Menu, Play, Success],
     physics: {
         default: 'arcade',
         arcade: {
@@ -15,6 +15,15 @@ let config = {
 };
 
 let game = new Phaser.Game(config);
+
+game.settings = {
+    enemySpeed: 1,
+  }
+
+let pointsToWin = 5;
+let startingPoints = 5;
+
+let levelNumber = 1;
 
 let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;

@@ -150,6 +150,14 @@ class Play extends Phaser.Scene {
             {
                 this.enemyGroup.getChildren().forEach(enemy => enemy.update());
             }
+
+            //Advance to Next Level
+            if (score >= pointsToWin)
+            {
+                this.scene.start("successScene");
+                pointsToWin += 5;
+                levelNumber++;
+            }
         }
         else
         {
@@ -179,6 +187,9 @@ class Play extends Phaser.Scene {
                 
                 this.player.reset();
                 this.enemyGroup.getChildren().forEach(enemy => enemy.reset());
+
+                levelNumber = 1;
+                pointsToWin = startingPoints;
             }
 
         }
