@@ -28,7 +28,7 @@ let levelNumber = 1;
 let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
-let keyUP, keyR, keyS;
+let keyUP, keyR, keyS, keyDown;
 
 let score = 0;
 let highScore = 0;
