@@ -147,7 +147,7 @@ class Play extends Phaser.Scene {
             // Jump
             if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)
             {
-                this.player.body.setVelocityY(-230);
+                this.player.body.setVelocityY(-700);
             }
             
             if (this.enemyGroup.getLength() != 0)
