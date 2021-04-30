@@ -164,7 +164,8 @@ class Play extends Phaser.Scene {
             //slide down 
             if (Phaser.Input.Keyboard.JustDown(keyDown) && this.player.body.touching.down)
             {
-                this.player.setTexture('player_slide').setOrigin(0.5, 1);
+                //this.player.setTexture('player_slide').setOrigin(0.0, 0);
+                this.player = this.add.image(game.config.width/10, borderUISize*10, 'player_slide');
             
             }
 
