@@ -24,6 +24,8 @@ class Menu extends Phaser.Scene{
         borderPadding, 'ENDLESS RUNNER', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2, 'Use S to start'
         , menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 50, 'Press ^ arrow to jump'
+        , menuConfig).setOrigin(0.5);
         menuConfig.backgroundColor = "#00FF00";
         menuConfig.color = '#000';
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);

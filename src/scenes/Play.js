@@ -11,6 +11,7 @@ class Play extends Phaser.Scene {
         this.load.image('enemy2', 'assets/obstacle_vending.png');
         this.load.image('enemy3', 'assets/obstacle3.png');
         this.load.image('cityscape', 'assets/CityBG.png');
+        this.load.image('player_slide', 'assets/player_crouch.png');
     }
 
     create()
@@ -57,6 +58,9 @@ class Play extends Phaser.Scene {
             borderUISize*10,
             'player',
         ).setOrigin(0.5, 0);
+        // this.crouch = new Player(this, game.config.width/10,
+        //     borderUISize*10,
+        //     'crouch');
 
         // Enable Physics for ground instance
         this.add.existing(this.ground);
@@ -75,6 +79,8 @@ class Play extends Phaser.Scene {
         // Initialize Keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);  
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        // keyDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.down);
+        
 
         //Create Enemy Group
         this.enemyGroup = this.physics.add.group();
@@ -141,7 +147,7 @@ class Play extends Phaser.Scene {
             // Jump
             if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)
             {
-                this.player.body.setVelocityY(-20);
+                this.player.body.setVelocityY(-230);
             }
             
             if (this.enemyGroup.getLength() != 0)
