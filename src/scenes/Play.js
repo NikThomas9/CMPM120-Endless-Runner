@@ -6,15 +6,21 @@ class Play extends Phaser.Scene {
     preload()
     {
         //Load Sprites
+        this.load.image('cityscape', 'assets/CityBG.png');
         this.load.image('building', 'assets/building.png');
-        this.load.image('player', 'assets/PlayerTest.png');
+        //this.load.image('playerRun', 'assets/PlayerTest.png');
         this.load.image('enemy1', 'assets/obstacle_pigeon.png');
         this.load.image('enemy2', 'assets/obstacle_vending.png');
         this.load.image('enemy3', 'assets/obstacle_hydrant.png');
-        this.load.image('cityscape', 'assets/CityBG.png');
-        this.load.image('player_slide', 'assets/player_slide.png');
-        
+        //this.load.image('player_slide', 'assets/player_slide.png');
+    
+        this.load.spritesheet('player', 
+                              './assets/player_sheet.png', 
+                              {frameWidth: 70, frameHeight: 100, startFrame: 0, endFrame: 3});
 
+        this.load.spritesheet('player_slide', 
+                              './assets/player_slide.png', 
+                              {frameWidth: 90, frameHeight: 49, startFrame: 0, endFrame: 0})
     }
 
     create()
@@ -60,7 +66,24 @@ class Play extends Phaser.Scene {
             game.config.width/10,
             borderUISize*10,
             'player',
-        ).setOrigin(0.5, 0);
+        ).setOrigin(0.0, 0);
+
+        //Animation config//
+        this.anims.create({
+            key: 'playerRun',
+            frames: this.anims.generateFrameNumbers('player', {start: 0, end: 3, first: 0}),
+            frameRate: 30,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'playerSlide',
+            frames: this.anims.generateFrameNumbers('player_slide', {start: 0, end: 0, first: 0}),
+            frameRate: 30,
+            repeat: -1
+        });
+
+        this.player.anims.play('playerRun');
 
         // Enable Physics for ground instance
         this.add.existing(this.ground);
@@ -167,14 +190,21 @@ class Play extends Phaser.Scene {
             // Jump
             if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)
             {
-                this.player.setTexture('player').setOrigin(0, 0);
                 this.player.body.setVelocityY(-700);
+
+                //Exit Slide State
+                this.player.anims.play('playerRun');
+                this.player.setOrigin(0, 0);
                 this.player.body.setSize(this.player.width, this.player.height, true);
             }
             //slide down 
             if (Phaser.Input.Keyboard.JustDown(keyDown) && this.player.body.touching.down)
             {
-                this.player.slide('player_slide');            
+                //Enter Slide State
+                this.player.anims.play('playerSlide');
+                this.player.setOrigin(0, -1);
+                this.player.body.setSize(this.width, this.height, true);
+                //this.player.slide('player_slide');            
             }
 
             
