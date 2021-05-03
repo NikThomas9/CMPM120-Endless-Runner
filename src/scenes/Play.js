@@ -138,7 +138,7 @@ class Play extends Phaser.Scene {
                         //create a new enemy
                         switch (this.enemyTypes[Phaser.Math.Between(0, 2)]) {
                             case "enemy1":
-                                this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1', null, this.enemyGroup).setOrigin(0, 0.0);
+                                this.spawn = new enemy1(this, game.config.width - 10, borderUISize*6.5, 'enemy1', null, this.enemyGroup).setOrigin(0, 0.0);
                                 break;
                                 
                             case "enemy2":
@@ -146,7 +146,7 @@ class Play extends Phaser.Scene {
                                 break;
 
                             case "enemy3":
-                                this.spawn = new enemy3(this, game.config.width - 10, borderUISize*10.5, 'enemy3', null, this.enemyGroup).setOrigin(0, 0.0);
+                                this.spawn = new enemy3(this, game.config.width - 10, borderUISize*9.5, 'enemy3', null, this.enemyGroup).setOrigin(0, 0.0);
                                 break;
                         }
 
