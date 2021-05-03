@@ -72,14 +72,14 @@ class Play extends Phaser.Scene {
         this.anims.create({
             key: 'playerRun',
             frames: this.anims.generateFrameNumbers('player', {start: 0, end: 3, first: 0}),
-            frameRate: 30,
+            frameRate: 15,
             repeat: -1
         });
 
         this.anims.create({
             key: 'playerSlide',
             frames: this.anims.generateFrameNumbers('player_slide', {start: 0, end: 0, first: 0}),
-            frameRate: 30,
+            frameRate: 15,
             repeat: -1
         });
 
@@ -185,7 +185,7 @@ class Play extends Phaser.Scene {
         if (!this.gameOver)
         {
             //Update scroll BG
-            this.cityscape.tilePositionX += 3;
+            this.cityscape.tilePositionX += 8;
 
             // Jump
             if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)
