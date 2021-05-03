@@ -6,10 +6,11 @@ class Play extends Phaser.Scene {
     preload()
     {
         //Load Sprites
+        this.load.image('building', 'assets/building.png');
         this.load.image('player', 'assets/PlayerTest.png');
         this.load.image('enemy1', 'assets/obstacle_pigeon.png');
         this.load.image('enemy2', 'assets/obstacle_vending.png');
-        this.load.image('enemy3', 'assets/obstacle3.png');
+        this.load.image('enemy3', 'assets/obstacle_hydrant.png');
         this.load.image('cityscape', 'assets/CityBG.png');
         this.load.image('player_slide', 'assets/player_slide.png');
         
@@ -60,14 +61,6 @@ class Play extends Phaser.Scene {
             borderUISize*10,
             'player',
         ).setOrigin(0.5, 0);
-       
-        // this.crouch = new Player(
-        //     this,
-        //     game.config.width/10,
-        //     borderUISize*10,
-        //     'player_slide',
-        // ).setOrigin(0.5, 0);
-        
 
         // Enable Physics for ground instance
         this.add.existing(this.ground);
@@ -117,23 +110,39 @@ class Play extends Phaser.Scene {
                 //Spawn enemy if the game is still active
                 if (!this.gameOver)
                 {
-                    //create a new enemy
-                    switch (this.enemyTypes[Phaser.Math.Between(0, 2)]) {
-                        case "enemy1":
-                            this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1', null, this.enemyGroup).setOrigin(0, 0.0);
-                            break;
-                            
-                        case "enemy2":
-                            this.spawn = new enemy2(this, game.config.width - 10, borderUISize*8.5, 'enemy2', null, this.enemyGroup).setOrigin(0, 0.0);
-                            break;
+                    if (pointsToWin > score)
+                    { 
+                        //create a new enemy
+                        switch (this.enemyTypes[Phaser.Math.Between(0, 2)]) {
+                            case "enemy1":
+                                this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1', null, this.enemyGroup).setOrigin(0, 0.0);
+                                break;
+                                
+                            case "enemy2":
+                                this.spawn = new enemy2(this, game.config.width - 10, borderUISize*8.5, 'enemy2', null, this.enemyGroup).setOrigin(0, 0.0);
+                                break;
 
-                        case "enemy3":
-                            this.spawn = new enemy3(this, game.config.width - 10, borderUISize*10.5, 'enemy3', null, this.enemyGroup).setOrigin(0, 0.0);
-                            break;
+                            case "enemy3":
+                                this.spawn = new enemy3(this, game.config.width - 10, borderUISize*10.5, 'enemy3', null, this.enemyGroup).setOrigin(0, 0.0);
+                                break;
+                        }
+
+                        //Update delay 
+                        this.spawnClock.delay = Phaser.Math.Between(2000, 3000);
                     }
-
-                    //Update delay 
-                    this.spawnClock.delay = Phaser.Math.Between(2000, 3000);
+                    else
+                    {
+                        this.building = new Building(this, game.config.width - 10, borderUISize - 30, 'building', null, this.enemyGroup).setOrigin(0, 0.0);
+                        this.physics.add.collider(this.building, this.ground);
+                        this.physics.add.collider(
+                            this.player,
+                            this.building,
+                            () => 
+                            {
+                                this.nextLevel(this);
+                            }
+                        );
+                    }
                 } 
             },
             callbackScope: this,
@@ -141,7 +150,7 @@ class Play extends Phaser.Scene {
         });
     }
 
-    update()
+    update(time, delta)
     {
         this.scoreText.text = score;
 
@@ -172,14 +181,6 @@ class Play extends Phaser.Scene {
             if (this.enemyGroup.getLength() != 0)
             {
                 this.enemyGroup.getChildren().forEach(enemy => enemy.update());
-            }
-
-            //Advance to Next Level
-            if (score >= pointsToWin)
-            {
-                this.scene.start("successScene");
-                pointsToWin = score + pointsToWin + 5;
-                levelNumber++;
             }
         }
         else
@@ -217,5 +218,12 @@ class Play extends Phaser.Scene {
             }
 
         }
+    }
+
+    nextLevel(currScene)
+    {
+        currScene.scene.start("successScene");
+        levelNumber++;
+        pointsToWin = score + (5 * levelNumber);
     }
 }
