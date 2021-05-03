@@ -18,4 +18,10 @@ class Player extends Phaser.GameObjects.Sprite {
         this.alive = true;
         this.alpha = 0;
     }
+
+    slide(texture)
+    {
+        this.setTexture(texture).setOrigin(0.0, -1);
+        this.body.setSize(this.width, this.height, true);
+    }
 }

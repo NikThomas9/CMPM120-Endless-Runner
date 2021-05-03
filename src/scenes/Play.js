@@ -11,7 +11,7 @@ class Play extends Phaser.Scene {
         this.load.image('enemy2', 'assets/obstacle_vending.png');
         this.load.image('enemy3', 'assets/obstacle3.png');
         this.load.image('cityscape', 'assets/CityBG.png');
-        this.load.image('player_slide', 'assets/player_crouch.png');
+        this.load.image('player_slide', 'assets/player_slide.png');
         
 
     }
@@ -158,16 +158,14 @@ class Play extends Phaser.Scene {
             // Jump
             if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)
             {
-                this.player.setTexture('player').setOrigin(0.5, 1);
+                this.player.setTexture('player').setOrigin(0, 0);
                 this.player.body.setVelocityY(-700);
                 this.player.body.setSize(this.player.width, this.player.height, true);
             }
             //slide down 
             if (Phaser.Input.Keyboard.JustDown(keyDown) && this.player.body.touching.down)
             {
-                this.player.setTexture('player_slide').setOrigin(0.0, 0);
-                this.player.body.setSize(this.player.width, this.player.height, true);
-            
+                this.player.slide('player_slide');            
             }
 
             
