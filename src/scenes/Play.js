@@ -9,15 +9,18 @@ class Play extends Phaser.Scene {
         this.load.image('cityscapeDay', 'assets/CityBG_day.png');
         this.load.image('cityscapeNight', 'assets/CityBG_night.png');
         this.load.image('building', 'assets/building.png');
-        //this.load.image('playerRun', 'assets/PlayerTest.png');
         this.load.image('enemy1', 'assets/obstacle_pigeon.png');
         this.load.image('enemy2', 'assets/obstacle_vending.png');
         this.load.image('enemy3', 'assets/obstacle_hydrant.png');
-        //this.load.image('player_slide', 'assets/player_slide.png');
     
         this.load.spritesheet('player', 
                               './assets/player_sheet.png', 
                               {frameWidth: 70, frameHeight: 100, startFrame: 0, endFrame: 3});
+
+        this.load.spritesheet('player_jump', 
+                              './assets/player_sheet.png', 
+                              {frameWidth: 70, frameHeight: 100, startFrame: 0, endFrame: 0});
+  
 
         this.load.spritesheet('player_slide', 
                               './assets/player_slide.png', 
@@ -26,17 +29,7 @@ class Play extends Phaser.Scene {
 
     create()
     {
-        //Find city background
-        let citySprite = "";
-
-        if (levelNumber % 2 == 1)
-        {
-            citySprite = 'cityscapeDay'
-        }
-        else
-        {
-            citySprite = 'cityscapeNight'
-        }
+        citySprite = (levelNumber % 2 == 1) ? 'cityscapeDay' : 'cityscapeNight';
 
         //Debug BG Asset
         this.cityscape = this.add.tileSprite(
@@ -92,6 +85,13 @@ class Play extends Phaser.Scene {
         this.anims.create({
             key: 'playerSlide',
             frames: this.anims.generateFrameNumbers('player_slide', {start: 0, end: 0, first: 0}),
+            frameRate: 15,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'playerJump',
+            frames: this.anims.generateFrameNumbers('player_jump', {start: 0, end: 0, first: 0}),
             frameRate: 15,
             repeat: -1
         });
@@ -198,16 +198,15 @@ class Play extends Phaser.Scene {
 
         if (!this.gameOver)
         {
+            this.player.update();
+            
             //Update scroll BG
             this.cityscape.tilePositionX += 8;
 
             // Jump
             if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)
             {
-                this.player.body.setVelocityY(-700);
-
-                //Exit Slide State
-                this.player.exitSlide();
+                this.player.jump('playerJump');
             }
             //slide down 
             if (Phaser.Input.Keyboard.JustDown(keyDown) && this.player.body.touching.down)

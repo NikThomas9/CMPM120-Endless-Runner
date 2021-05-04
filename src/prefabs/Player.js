@@ -8,23 +8,29 @@ class Player extends Phaser.GameObjects.Sprite {
 
         this.body.gravity.y = 1200;
         this.isSliding = false;
+        this.isRunning = true;
     }
 
     update() {
-        
+        if (this.body.touching.down && !this.isRunning && !this.isSliding)
+        {
+            this.run();
+        }
+        console.log(this.isRunning);
+
     }
 
     reset() {
-        console.log("hit");
         this.alive = true;
         this.alpha = 0;
     }
 
-    slide(animation)
+    slide()
     {
         //Enter Slide State
         this.isSliding = true;
-        this.anims.play(animation);
+        this.isRunning = false;
+        this.anims.play('playerSlide');
         this.setOrigin(0, -1);
         this.body.setSize(this.width, this.height, true);
 
@@ -42,14 +48,32 @@ class Player extends Phaser.GameObjects.Sprite {
         });
     }
 
-    exitSlide()
+    jump()
     {
-        //Exit Slide State
-        this.isSliding = false;
-        this.anims.play('playerRun');
+        this.body.setVelocityY(-700);
+        this.isRunning = false;
+
+        if (this.isSliding)
+        {
+            this.exitSlide();
+        }
+
+        this.anims.play('playerJump');
         this.setOrigin(0, 0);
         this.body.setSize(this.width, this.height, true);
     }
 
-    
+    exitSlide()
+    {
+        //Exit Slide State
+        this.isSliding = false;
+    }
+
+    run()
+    {
+        this.isRunning = true;
+        this.anims.play('playerRun');
+        this.setOrigin(0, 0);
+        this.body.setSize(this.width, this.height, true);
+    }    
 }

@@ -13,7 +13,7 @@ let config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 200 },
-            debug: true,
+            debug: false,
             fps: 60,
         },
     }
@@ -37,3 +37,5 @@ let keyUP, keyR, keyS, keyDown;
 
 let score = 0;
 let highScore = 0;
+
+let citySprite;
