@@ -30,12 +30,23 @@ class Success extends Phaser.Scene {
             successConfig.color = '#000';
             
 
-
-            this.add.text(game.config.width/2, game.config.height/2, 
+            if(levelNumber % 2 != 0){
+             this.add.text(game.config.width/2, game.config.height/2, 
+                    'GET READY TO GO TO YOUR MORNING SHIFT', 
+                    successConfig).setOrigin(0.5);
+             }
+             else{
+                this.add.text(game.config.width/2, game.config.height/2, 
+                    'GET READY TO GO TO YOUR NIGHT SHIFT', 
+                    successConfig).setOrigin(0.5);
+             }
+            this.add.text(game.config.width/2, game.config.height/2 + 50, 
             'Press S to move to Level ' + levelNumber + '!', 
             successConfig).setOrigin(0.5);
+            
             keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
             }
+        
     
        
         
@@ -45,13 +56,7 @@ class Success extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyS)) {
             // easy mode
             this.scene.start('playScene');
-            if(levelNumber!= 1 && levelNumber % 2 == 0 ){
-                alert("WAKE UP YOU ARE RUNNING LATE FOR WORK");
-            }
-            else if(levelNumber!= 1 && levelNumber % 2 != 0){
-                alert('NIGHTY NIGHT YOU ARE ALMOST THERE !');
-
-            }
+           
             
         }
     }

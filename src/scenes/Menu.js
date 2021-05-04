@@ -8,7 +8,7 @@ class Menu extends Phaser.Scene{
    create(){
        let menuConfig = {
            fontFamily: 'Courier',
-           fontSize: '28px',
+           fontSize: '25px',
            backgroundColor: '#FFC0CB',
            color: '#843605',
            align: 'right',
@@ -21,11 +21,13 @@ class Menu extends Phaser.Scene{
        this.cover = this.add.image(game.config.width / 2, game.config.height / 2, 'cityscapeDay');
         this.cover.setDisplaySize(game.config.width, game.config.height);
        this.add.text(game.config.width/2, game.config.height/2 - borderUISize -
-        borderPadding, 'ENDLESS RUNNER', menuConfig).setOrigin(0.5);
-        
+        borderPadding, 'RUNNING LATE', menuConfig).setOrigin(0.5);
+
         this.add.text(game.config.width/2, game.config.height/2, 'Use S to start'
         , menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 + 50, 'Press ^ arrow to jump'
+        this.add.text(game.config.width/2, game.config.height/2 + 50, 'Press ^ arrow to jump and'
+        , menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 80, 'v to slide down'
         , menuConfig).setOrigin(0.5);
         menuConfig.backgroundColor = "#00FF00";
         menuConfig.color = '#000';

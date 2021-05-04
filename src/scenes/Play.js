@@ -25,10 +25,14 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('player_slide', 
                               './assets/player_slide.png', 
                               {frameWidth: 90, frameHeight: 49, startFrame: 0, endFrame: 0})
+        
+        this.load.audio('music', 'assets/background.wav');
     }
 
     create()
     {
+        music = this.sound.add('music');
+        music.play();
         citySprite = (levelNumber % 2 == 1) ? 'cityscapeDay' : 'cityscapeNight';
 
         //Debug BG Asset
@@ -242,8 +246,8 @@ class Play extends Phaser.Scene {
                     },
                     fixedWidth: 0
                 }
-                alert("YOU DIDN'T REACH WORK ON TIME :(");
-                this.add.text(game.config.width/2, game.config.height/2 - 15, 'Game Over!',gameoverConfig).setOrigin(0.5);
+                music.destroy();
+                this.add.text(game.config.width/2, game.config.height/2 - 15, 'YOU COULDNT REACH WORK IN TIME',gameoverConfig).setOrigin(0.5);
                 this.add.text(game.config.width/2, game.config.height/2 + 30, 'Press (R) to Restart',gameoverConfig).setOrigin(0.5);
                 this.add.text(game.config.width/2, game.config.height/2 + 75, 'HIGH SCORE: ' + highScore,gameoverConfig).setOrigin(0.5);
                 
