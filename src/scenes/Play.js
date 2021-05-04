@@ -9,7 +9,7 @@ class Play extends Phaser.Scene {
         this.load.image('cityscapeDay', 'assets/CityBG_day.png');
         this.load.image('cityscapeNight', 'assets/CityBG_night.png');
         this.load.image('building', 'assets/building.png');
-        this.load.image('enemy1', 'assets/obstacle_pigeon.png');
+        this.load.image('enemy1', 'assets/obstacle_pigeon_air.png');
         this.load.image('enemy2', 'assets/obstacle_vending.png');
         this.load.image('enemy3', 'assets/obstacle_hydrant.png');
     
@@ -199,7 +199,7 @@ class Play extends Phaser.Scene {
         if (!this.gameOver)
         {
             this.player.update();
-            
+
             //Update scroll BG
             this.cityscape.tilePositionX += 8;
 
