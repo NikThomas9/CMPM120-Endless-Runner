@@ -6,7 +6,8 @@ class Play extends Phaser.Scene {
     preload()
     {
         //Load Sprites
-        this.load.image('cityscape', 'assets/CityBG.png');
+        this.load.image('cityscapeDay', 'assets/CityBG_day.png');
+        this.load.image('cityscapeNight', 'assets/CityBG_night.png');
         this.load.image('building', 'assets/building.png');
         //this.load.image('playerRun', 'assets/PlayerTest.png');
         this.load.image('enemy1', 'assets/obstacle_pigeon.png');
@@ -25,13 +26,25 @@ class Play extends Phaser.Scene {
 
     create()
     {
+        //Find city background
+        let citySprite = "";
+
+        if (levelNumber % 2 == 1)
+        {
+            citySprite = 'cityscapeDay'
+        }
+        else
+        {
+            citySprite = 'cityscapeNight'
+        }
+
         //Debug BG Asset
         this.cityscape = this.add.tileSprite(
             0,
             0,
             game.config.width,
             game.config.height,
-            'cityscape',
+            citySprite,
             ).setOrigin(0,0);
 
         //Ground Physics Collider
@@ -171,6 +184,7 @@ class Play extends Phaser.Scene {
             callbackScope: this,
             loop: true
         });
+
     }
 
     update(time, delta)
@@ -193,18 +207,12 @@ class Play extends Phaser.Scene {
                 this.player.body.setVelocityY(-700);
 
                 //Exit Slide State
-                this.player.anims.play('playerRun');
-                this.player.setOrigin(0, 0);
-                this.player.body.setSize(this.player.width, this.player.height, true);
+                this.player.exitSlide();
             }
             //slide down 
             if (Phaser.Input.Keyboard.JustDown(keyDown) && this.player.body.touching.down)
             {
-                //Enter Slide State
-                this.player.anims.play('playerSlide');
-                this.player.setOrigin(0, -1);
-                this.player.body.setSize(this.width, this.height, true);
-                //this.player.slide('player_slide');            
+                this.player.slide('playerSlide');            
             }
 
             

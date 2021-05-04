@@ -7,6 +7,7 @@ class Player extends Phaser.GameObjects.Sprite {
         scene.physics.add.existing(this);
 
         this.body.gravity.y = 1200;
+        this.isSliding = false;
     }
 
     update() {
@@ -19,9 +20,36 @@ class Player extends Phaser.GameObjects.Sprite {
         this.alpha = 0;
     }
 
-    slide(texture)
+    slide(animation)
     {
-        this.setTexture(texture).setOrigin(0.0, -1);
+        //Enter Slide State
+        this.isSliding = true;
+        this.anims.play(animation);
+        this.setOrigin(0, -1);
+        this.body.setSize(this.width, this.height, true);
+
+        this.slideTimer = this.scene.time.addEvent({
+            delay: 1000,
+            callback: () =>
+            {
+                if (this.isSliding)
+                {
+                    this.exitSlide();
+                }
+            },
+            callbackScope: this,
+            loop: false
+        });
+    }
+
+    exitSlide()
+    {
+        //Exit Slide State
+        this.isSliding = false;
+        this.anims.play('playerRun');
+        this.setOrigin(0, 0);
         this.body.setSize(this.width, this.height, true);
     }
+
+    
 }
