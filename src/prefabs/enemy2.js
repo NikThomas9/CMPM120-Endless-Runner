@@ -17,4 +17,9 @@ class enemy2 extends Enemy
         
         this.body.setVelocityX(-550);
     }
+
+    setBody()
+    {
+        this.body.setSize(this.width - 50, this.height - 5, true);
+    }
 }

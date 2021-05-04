@@ -4,7 +4,8 @@ class Success extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('cover', 'assets/CityBG.png');
+        this.load.image('cityscapeDay', 'assets/CityBG_day.png');
+        this.load.image('cityscapeNight', 'assets/CityBG_night.png');
     }
 
         create(){
@@ -21,7 +22,7 @@ class Success extends Phaser.Scene {
                 fixedWidth: 0
             }
 
-            this.cover = this.add.image(game.config.width / 2, game.config.height / 2, 'cover');
+            this.cover = this.add.image(game.config.width / 2, game.config.height / 2, citySprite);
             this.cover.setDisplaySize(game.config.width, game.config.height);
             this.add.text(game.config.width/2, game.config.height/2 - borderUISize -
             borderPadding, 'Success!', successConfig).setOrigin(0.5);

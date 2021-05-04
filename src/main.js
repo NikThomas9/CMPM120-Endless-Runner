@@ -4,13 +4,18 @@ let config = {
     type: Phaser.CANVAS,
     width: 640,
     height: 480,
+    fps: {
+        target: 60,
+        forceSetTimeOut: true,
+    },
     scene:  [Menu, Play, Success],
     physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 200 },
-            debug: false
-        }
+            debug: false,
+            fps: 60,
+        },
     }
 };
 
@@ -28,7 +33,9 @@ let levelNumber = 1;
 let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
-let keyUP, keyR, keyS;
+let keyUP, keyR, keyS, keyDown;
 
 let score = 0;
 let highScore = 0;
+
+let citySprite;

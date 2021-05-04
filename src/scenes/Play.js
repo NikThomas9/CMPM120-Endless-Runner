@@ -6,23 +6,38 @@ class Play extends Phaser.Scene {
     preload()
     {
         //Load Sprites
-        this.load.image('player', 'assets/PlayerTest.png');
-        this.load.image('enemy1', 'assets/obstacle_pigeon.png');
+        this.load.image('cityscapeDay', 'assets/CityBG_day.png');
+        this.load.image('cityscapeNight', 'assets/CityBG_night.png');
+        this.load.image('building', 'assets/building.png');
+        this.load.image('enemy1', 'assets/obstacle_pigeon_air.png');
         this.load.image('enemy2', 'assets/obstacle_vending.png');
-        this.load.image('enemy3', 'assets/obstacle3.png');
-        this.load.image('cityscape', 'assets/CityBG.png');
-        this.load.image('player_slide', 'assets/player_crouch.png');
+        this.load.image('enemy3', 'assets/obstacle_hydrant.png');
+    
+        this.load.spritesheet('player', 
+                              './assets/player_sheet.png', 
+                              {frameWidth: 70, frameHeight: 100, startFrame: 0, endFrame: 3});
+
+        this.load.spritesheet('player_jump', 
+                              './assets/player_sheet.png', 
+                              {frameWidth: 70, frameHeight: 100, startFrame: 0, endFrame: 0});
+  
+
+        this.load.spritesheet('player_slide', 
+                              './assets/player_slide.png', 
+                              {frameWidth: 90, frameHeight: 49, startFrame: 0, endFrame: 0})
     }
 
     create()
     {
+        citySprite = (levelNumber % 2 == 1) ? 'cityscapeDay' : 'cityscapeNight';
+
         //Debug BG Asset
         this.cityscape = this.add.tileSprite(
             0,
             0,
             game.config.width,
             game.config.height,
-            'cityscape',
+            citySprite,
             ).setOrigin(0,0);
 
         //Ground Physics Collider
@@ -57,10 +72,31 @@ class Play extends Phaser.Scene {
             game.config.width/10,
             borderUISize*10,
             'player',
-        ).setOrigin(0.5, 0);
-        // this.crouch = new Player(this, game.config.width/10,
-        //     borderUISize*10,
-        //     'crouch');
+        ).setOrigin(0.0, 0);
+
+        //Animation config//
+        this.anims.create({
+            key: 'playerRun',
+            frames: this.anims.generateFrameNumbers('player', {start: 0, end: 3, first: 0}),
+            frameRate: 15,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'playerSlide',
+            frames: this.anims.generateFrameNumbers('player_slide', {start: 0, end: 0, first: 0}),
+            frameRate: 15,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'playerJump',
+            frames: this.anims.generateFrameNumbers('player_jump', {start: 0, end: 0, first: 0}),
+            frameRate: 15,
+            repeat: -1
+        });
+
+        this.player.anims.play('playerRun');
 
         // Enable Physics for ground instance
         this.add.existing(this.ground);
@@ -68,10 +104,13 @@ class Play extends Phaser.Scene {
 
         // Set world bounds 
         this.ground.body.setCollideWorldBounds(true);
-        this.player.body.setCollideWorldBounds(true);        
+        this.player.body.setCollideWorldBounds(true);  
+        
+           
         
         // Collision between objects with the ground
         this.physics.add.collider(this.player, this.ground);
+
 
         // Set game over flag
         this.gameOver = false;
@@ -79,7 +118,7 @@ class Play extends Phaser.Scene {
         // Initialize Keys
         keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);  
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
-        // keyDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.down);
+        keyDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         
 
         //Create Enemy Group
@@ -95,6 +134,7 @@ class Play extends Phaser.Scene {
             });
 
         this.enemyTypes = ["enemy1", "enemy2", "enemy3"];
+        
 
 
         //Main Spawn System
@@ -106,31 +146,48 @@ class Play extends Phaser.Scene {
                 //Spawn enemy if the game is still active
                 if (!this.gameOver)
                 {
-                    //create a new enemy
-                    switch (this.enemyTypes[Phaser.Math.Between(0, 2)]) {
-                        case "enemy1":
-                            this.spawn = new enemy1(this, game.config.width - 10, borderUISize*10.5, 'enemy1', null, this.enemyGroup).setOrigin(0, 0.0);
-                            break;
-                            
-                        case "enemy2":
-                            this.spawn = new enemy2(this, game.config.width - 10, borderUISize*8.5, 'enemy2', null, this.enemyGroup).setOrigin(0, 0.0);
-                            break;
+                    if (pointsToWin > score)
+                    { 
+                        //create a new enemy
+                        switch (this.enemyTypes[Phaser.Math.Between(0, 2)]) {
+                            case "enemy1":
+                                this.spawn = new enemy1(this, game.config.width - 10, borderUISize*6.5, 'enemy1', null, this.enemyGroup).setOrigin(0, 0.0);
+                                break;
+                                
+                            case "enemy2":
+                                this.spawn = new enemy2(this, game.config.width - 10, borderUISize*8.5, 'enemy2', null, this.enemyGroup).setOrigin(0, 0.0);
+                                break;
 
-                        case "enemy3":
-                            this.spawn = new enemy3(this, game.config.width - 10, borderUISize*10.5, 'enemy3', null, this.enemyGroup).setOrigin(0, 0.0);
-                            break;
+                            case "enemy3":
+                                this.spawn = new enemy3(this, game.config.width - 10, borderUISize*9.5, 'enemy3', null, this.enemyGroup).setOrigin(0, 0.0);
+                                break;
+                        }
+
+                        //Update delay 
+                        this.spawnClock.delay = Phaser.Math.Between(2000, 3000);
                     }
-
-                    //Update delay 
-                    this.spawnClock.delay = Phaser.Math.Between(2000, 3000);
+                    else
+                    {
+                        this.building = new Building(this, game.config.width - 10, borderUISize - 30, 'building', null, this.enemyGroup).setOrigin(0, 0.0);
+                        this.physics.add.collider(this.building, this.ground);
+                        this.physics.add.collider(
+                            this.player,
+                            this.building,
+                            () => 
+                            {
+                                this.nextLevel(this);
+                            }
+                        );
+                    }
                 } 
             },
             callbackScope: this,
             loop: true
         });
+
     }
 
-    update()
+    update(time, delta)
     {
         this.scoreText.text = score;
 
@@ -141,26 +198,26 @@ class Play extends Phaser.Scene {
 
         if (!this.gameOver)
         {
+            this.player.update();
+
             //Update scroll BG
-            this.cityscape.tilePositionX += 3;
+            this.cityscape.tilePositionX += 8;
 
             // Jump
             if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)
             {
-                this.player.body.setVelocityY(-700);
+                this.player.jump('playerJump');
             }
+            //slide down 
+            if (Phaser.Input.Keyboard.JustDown(keyDown) && this.player.body.touching.down)
+            {
+                this.player.slide('playerSlide');            
+            }
+
             
             if (this.enemyGroup.getLength() != 0)
             {
                 this.enemyGroup.getChildren().forEach(enemy => enemy.update());
-            }
-
-            //Advance to Next Level
-            if (score >= pointsToWin)
-            {
-                this.scene.start("successScene");
-                pointsToWin = score + pointsToWin + 5;
-                levelNumber++;
             }
         }
         else
@@ -168,7 +225,7 @@ class Play extends Phaser.Scene {
             //Update high score
             if (score > highScore)
             {
-                 highScore = score;
+                highScore = score;
             }
 
             if (this.player.alive == false)
@@ -199,5 +256,12 @@ class Play extends Phaser.Scene {
             }
 
         }
+    }
+
+    nextLevel(currScene)
+    {
+        currScene.scene.start("successScene");
+        levelNumber++;
+        pointsToWin = score + (5 * levelNumber);
     }
 }
