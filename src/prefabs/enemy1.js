@@ -2,7 +2,7 @@ class enemy1 extends Enemy
 {
     constructor(scene, x, y, texture, frame, enemyGroup){
         super(scene, x, y, texture, frame, enemyGroup);
-        this.body.gravity.y = -100;
+        this.body.gravity.y = -150;
 
     }
 
@@ -18,7 +18,7 @@ class enemy1 extends Enemy
 
     setSpeed()
     {
-        this.body.setVelocityX(-700);
+        this.body.setVelocityX(-500);
         this.body.setVelocityY(0);
 
     }

@@ -27,11 +27,20 @@ class Play extends Phaser.Scene {
                               {frameWidth: 90, frameHeight: 49, startFrame: 0, endFrame: 0})
         
         this.load.audio('music', 'assets/background.wav');
+        this.load.audio('jump', 'assets/jump.wav');
+        this.load.audio('collide', 'assets/collide.wav');
     }
 
     create()
     {
-        music = this.sound.add('music');
+        if (music == null)
+        {
+            music = this.sound.add('music');
+        }
+
+        this.jumpSFX = this.sound.add('jump');
+        this.collideSFX = this.sound.add('collide');
+
 
         if(!music.isPlaying)
         {
@@ -115,8 +124,6 @@ class Play extends Phaser.Scene {
         this.ground.body.setCollideWorldBounds(true);
         this.player.body.setCollideWorldBounds(true);  
         
-           
-        
         // Collision between objects with the ground
         this.physics.add.collider(this.player, this.ground);
 
@@ -138,6 +145,7 @@ class Play extends Phaser.Scene {
             this.enemyGroup, 
             () =>
             {
+                this.collideSFX.play();
                 this.gameOver = true;
                 this.player.alive = false;
             });
@@ -198,6 +206,11 @@ class Play extends Phaser.Scene {
 
     update(time, delta)
     {
+        if(music.duration >= music.totalDuration)
+        {
+            //music.play();
+        }
+
         this.scoreText.text = score;
 
         //If game over, check input for restart
@@ -215,6 +228,7 @@ class Play extends Phaser.Scene {
             // Jump
             if (Phaser.Input.Keyboard.JustDown(keyUP) && this.player.body.touching.down)
             {
+                this.jumpSFX.play();
                 this.player.jump('playerJump');
             }
             //slide down 

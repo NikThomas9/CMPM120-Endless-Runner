@@ -27,10 +27,19 @@ class Success extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height/2 - borderUISize -
             borderPadding, 'Success!', successConfig).setOrigin(0.5);
 
+            let offset = 0;
+
             if(levelNumber % 2 != 0){
              this.add.text(game.config.width/2, game.config.height/2, 
-                    'Time to prep for your morning class again...', 
+                    'Time to prep for your ', 
                     successConfig).setOrigin(0.5);
+
+            this.add.text(game.config.width/2, game.config.height/2 + 50, 
+                'morning class again...', 
+                successConfig).setOrigin(0.5);
+
+                offset += 50;
+
              }
              else{
                 this.add.text(game.config.width/2, game.config.height/2, 
@@ -38,7 +47,7 @@ class Success extends Phaser.Scene {
                     successConfig).setOrigin(0.5);
             }
 
-            this.add.text(game.config.width/2, game.config.height/2 + 50, 
+            this.add.text(game.config.width/2, game.config.height/2 + 50 + offset, 
             'Press S to move to Level ' + levelNumber + '!', 
             successConfig).setOrigin(0.5);
             
