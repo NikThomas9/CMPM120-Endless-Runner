@@ -8,7 +8,7 @@ let config = {
         target: 60,
         forceSetTimeOut: true,
     },
-    scene:  [Intro1, Intro2, Intro3,  Menu, Play, Success],
+    scene:  [Menu, Intro1, Intro2, Intro3, Play, Success, GameOver],
     physics: {
         default: 'arcade',
         arcade: {
@@ -20,11 +20,8 @@ let config = {
 };
 
 let game = new Phaser.Game(config);
-let music;
 
-game.settings = {
-    enemySpeed: 1,
-  }
+let music;
 
 let pointsToWin = 5;
 let startingPoints = 5;
@@ -36,6 +33,7 @@ let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
 let keyUP, keyR, keyS, keyDown, keyRight;
+
 
 
 let score = 0;

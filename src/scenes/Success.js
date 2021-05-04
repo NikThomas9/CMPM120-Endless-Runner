@@ -26,20 +26,18 @@ class Success extends Phaser.Scene {
             this.cover.setDisplaySize(game.config.width, game.config.height);
             this.add.text(game.config.width/2, game.config.height/2 - borderUISize -
             borderPadding, 'Success!', successConfig).setOrigin(0.5);
-            successConfig.backgroundColor = "#00FF00";
-            successConfig.color = '#000';
-            
 
             if(levelNumber % 2 != 0){
              this.add.text(game.config.width/2, game.config.height/2, 
-                    'GET READY TO GO TO YOUR MORNING SHIFT', 
+                    'Time to prep for your morning class again...', 
                     successConfig).setOrigin(0.5);
              }
              else{
                 this.add.text(game.config.width/2, game.config.height/2, 
-                    'GET READY TO GO TO YOUR NIGHT SHIFT', 
+                    'You have a night class to teach, too!', 
                     successConfig).setOrigin(0.5);
-             }
+            }
+
             this.add.text(game.config.width/2, game.config.height/2 + 50, 
             'Press S to move to Level ' + levelNumber + '!', 
             successConfig).setOrigin(0.5);

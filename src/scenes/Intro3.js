@@ -3,49 +3,6 @@ class Intro3 extends Phaser.Scene{
         super("intro3");
     }
     
-//     create(){
-//         text = this.add.text(32, 32, '', { font: "15px Arial", fill: "#19de65" });
-//         nextLine();
-//     }
-//     nextLine(){
-//         if (lineIndex === content.length)
-//         {
-//             //  We're finished
-//             return;
-//         }
-    
-//         //  Split the current line on spaces, so one word per array element
-//         line = content[lineIndex].split(' ');
-    
-//         //  Reset the word index to zero (the first word in the line)
-//         wordIndex = 0;
-    
-//         //  Call the 'nextWord' function once for each word in the line (line.length)
-//         game.time.events.repeat(wordDelay, line.length, nextWord, this);
-    
-//         //  Advance to the next line
-//         lineIndex++;
-//     }
-//     nextWord(){
-//          //  Add the next word onto the text string, followed by a space
-//     text.text = text.text.concat(line[wordIndex] + " ");
-
-//     //  Advance the word index to the next word in the line
-//     wordIndex++;
-
-//     //  Last word?
-//     if (wordIndex === line.length)
-//     {
-//         //  Add a carriage return
-//         text.text = text.text.concat("\n");
-
-//         //  Get the next line after the lineDelay amount of ms has elapsed
-//         game.time.events.add(lineDelay, nextLine, this);
-//     }
-//     }
-
-    
-// }
 create(){
     let menuConfig = {
         fontFamily: 'Courier',
@@ -60,22 +17,26 @@ create(){
         fixedWidth: 0
     }
  
-    this.add.text(game.config.width/2, game.config.height/2 - borderUISize -
-     borderPadding, 'Your goal is to hurry up and', menuConfig).setOrigin(0.5);
-     this.add.text(game.config.width/2, game.config.height/2 - borderUISize -
-    borderPadding + 50, 'run to work so you do not get fired', menuConfig).setOrigin(0.5);
-     keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+    this.cover = this.add.image(game.config.width / 2, game.config.height / 2, 'cityscapeDay');
+    this.cover.setDisplaySize(game.config.width, game.config.height);
 
-     
-    
+    this.add.text(game.config.width/2, game.config.height/2 - borderUISize -
+    borderPadding, 'You need to get moving quick!', menuConfig).setOrigin(0.5);
+
+    this.add.text(game.config.width/2, game.config.height/2 - borderUISize -
+    borderPadding + 50, 'Your students are waiting for you!', menuConfig).setOrigin(0.5);
+
+    this.add.text(game.config.width/2, game.config.height/2 - borderUISize -
+    borderPadding + 100, '(Press S to Get Running!)', menuConfig).setOrigin(0.5);
+
+    keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 } 
-update() {
- if (Phaser.Input.Keyboard.JustDown(keyRight)) {
-   // easy mode
-   this.scene.start('menuScene');
-   
- }
-}
+    update() {
+        if (Phaser.Input.Keyboard.JustDown(keyS)) {
+            this.scene.start('playScene');
+
+        }
+    }
 }
     
 

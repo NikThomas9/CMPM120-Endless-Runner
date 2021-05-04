@@ -32,7 +32,12 @@ class Play extends Phaser.Scene {
     create()
     {
         music = this.sound.add('music');
-        music.play();
+
+        if(!music.isPlaying)
+        {
+            music.play();
+        }
+
         citySprite = (levelNumber % 2 == 1) ? 'cityscapeDay' : 'cityscapeNight';
 
         //Debug BG Asset
@@ -232,33 +237,16 @@ class Play extends Phaser.Scene {
                 highScore = score;
             }
 
-            if (this.player.alive == false)
-            {
-                let gameoverConfig = {
-                    fontFamily: 'Courier',
-                    fontSize: '28px',
-                    backgroundColor: '#FFC0CB',
-                    color: '#843605',
-                    align: 'right',
-                    padding: {
-                        top: 5,
-                        bottom: 5,
-                    },
-                    fixedWidth: 0
-                }
-                music.destroy();
-                this.add.text(game.config.width/2, game.config.height/2 - 15, 'YOU COULDNT REACH WORK IN TIME',gameoverConfig).setOrigin(0.5);
-                this.add.text(game.config.width/2, game.config.height/2 + 30, 'Press (R) to Restart',gameoverConfig).setOrigin(0.5);
-                this.add.text(game.config.width/2, game.config.height/2 + 75, 'HIGH SCORE: ' + highScore,gameoverConfig).setOrigin(0.5);
+            music.stop();
                 
-                this.player.reset();
-                this.enemyGroup.getChildren().forEach(enemy => enemy.reset());
+            this.player.reset();
+            this.enemyGroup.getChildren().forEach(enemy => enemy.reset());
 
-                levelNumber = 1;
-                pointsToWin = startingPoints;
-                score = 0;
-            }
+            levelNumber = 1;
+            pointsToWin = startingPoints;
+            score = 0;
 
+            this.scene.start("gameOverScene");
         }
     }
 
