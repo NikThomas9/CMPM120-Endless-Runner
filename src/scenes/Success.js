@@ -27,17 +27,30 @@ class Success extends Phaser.Scene {
             borderPadding, 'Success!', successConfig).setOrigin(0.5);
             successConfig.backgroundColor = "#00FF00";
             successConfig.color = '#000';
+            
+
+
             this.add.text(game.config.width/2, game.config.height/2, 
             'Press S to move to Level ' + levelNumber + '!', 
             successConfig).setOrigin(0.5);
-    
             keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-        }
+            }
+    
+       
+        
+
 
     update() {
         if (Phaser.Input.Keyboard.JustDown(keyS)) {
             // easy mode
             this.scene.start('playScene');
+            if(levelNumber!= 1 && levelNumber % 2 == 0 ){
+                alert("WAKE UP YOU ARE RUNNING LATE FOR WORK");
+            }
+            else if(levelNumber!= 1 && levelNumber % 2 != 0){
+                alert('NIGHTY NIGHT YOU ARE ALMOST THERE !');
+
+            }
             
         }
     }

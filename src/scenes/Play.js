@@ -185,6 +185,7 @@ class Play extends Phaser.Scene {
                     },
                     fixedWidth: 0
                 }
+                alert("YOU DIDN'T REACH WORK ON TIME :(");
                 this.add.text(game.config.width/2, game.config.height/2 - 15, 'Game Over!',gameoverConfig).setOrigin(0.5);
                 this.add.text(game.config.width/2, game.config.height/2 + 30, 'Press (R) to Restart',gameoverConfig).setOrigin(0.5);
                 this.add.text(game.config.width/2, game.config.height/2 + 75, 'HIGH SCORE: ' + highScore,gameoverConfig).setOrigin(0.5);
