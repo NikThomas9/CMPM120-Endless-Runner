@@ -16,8 +16,6 @@ class Player extends Phaser.GameObjects.Sprite {
         {
             this.run();
         }
-        console.log(this.isRunning);
-
     }
 
     reset() {
