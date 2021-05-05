@@ -24,6 +24,25 @@
 //
 //
 // CREATIVE TILT //
+//
+// Technical Aspects:
+//
+// Probably the most impressive technical system in our game is the enemy spawning system.
+// By using a group collider and a small update() per enemy instance, the system is
+// efficient and has good performance.
+//
+// In addition to that, the enemy class uses inheritance to spawn three different enemy types:
+// the hydrant, bird and vending machine. Despite being very different types of obstacles,
+// this system uses overriding and superclass inheritance to keep enemy functionality
+// organized and similar yet unique for each class.
+//
+// Finally, due to randomization and a procedural way to track the background and level length,
+// the game works well in the endless format. The constantly changing background and random enemy 
+// patterns prevent stagnation, and the levels get slightly harder to beat each time, making
+// later levels more difficult to beat due to their length.
+//
+// Style and Creative Goals:
+//
 // The creative intent of Running Late! was to provide a fun backstory
 // to justify the mechanics of the endless runner genre. Rather than
 // simply avoiding enemies, the goal of Running Late! is to reach
