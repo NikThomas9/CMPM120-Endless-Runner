@@ -9,6 +9,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.body.gravity.y = 1200;
         this.isSliding = false;
         this.isRunning = true;
+        this.canSlide = true;
     }
 
     update() {
@@ -38,7 +39,7 @@ class Player extends Phaser.GameObjects.Sprite {
             {
                 if (this.isSliding)
                 {
-                    this.exitSlide();
+                    this.exitSlide(this.slideTimer);
                 }
             },
             callbackScope: this,
@@ -61,15 +62,32 @@ class Player extends Phaser.GameObjects.Sprite {
         this.body.setSize(this.width, this.height, true);
     }
 
-    exitSlide()
+    exitSlide(slideTimer)
     {
         //Exit Slide State
+        if (slideTimer != null)
+        {        
+            this.slideTimer.remove();
+        }
+
         this.isSliding = false;
+        this.canSlide = false;
+
+        this.noSlide = this.scene.time.addEvent({
+            delay: 300,
+            callback: () =>
+            {
+                this.canSlide = true;
+            },
+            callbackScope: this,
+            loop: false
+        });
     }
 
     run()
     {
         this.isRunning = true;
+        this.isSliding = false;
         this.anims.play('playerRun');
         this.setOrigin(0, 0);
         this.body.setSize(this.width, this.height, true);

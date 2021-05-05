@@ -35,7 +35,10 @@ class Play extends Phaser.Scene {
     {
         if (music == null)
         {
-            music = this.sound.add('music');
+            music = this.sound.add('music',
+            {
+                loop: true
+            });
         }
 
         this.jumpSFX = this.sound.add('jump');
@@ -62,7 +65,7 @@ class Play extends Phaser.Scene {
         this.ground = this.add.rectangle(
             0,
             borderUISize * 15,
-            game.config.width,
+            game.config.width * 2,
             borderUISize * 2.5,
             0x917dd4,
             0
@@ -91,6 +94,8 @@ class Play extends Phaser.Scene {
             borderUISize*10,
             'player',
         ).setOrigin(0.0, 0);
+
+        this.player.depth = 5;
 
         //Animation config//
         this.anims.create({
@@ -150,9 +155,13 @@ class Play extends Phaser.Scene {
                 this.player.alive = false;
             });
 
-        this.enemyTypes = ["enemy1", "enemy2", "enemy3"];
+        this.enemyTypes = ["enemy1", "enemy3"];
         
-
+        if (levelNumber > 1)
+        {
+            this.enemyTypes.push("enemy2");
+            console.log(this.enemyTypes.length);
+        }
 
         //Main Spawn System
         this.spawnClock = this.time.addEvent({
@@ -166,13 +175,13 @@ class Play extends Phaser.Scene {
                     if (pointsToWin > score)
                     { 
                         //create a new enemy
-                        switch (this.enemyTypes[Phaser.Math.Between(0, 2)]) {
+                        switch (this.enemyTypes[Phaser.Math.Between(0, this.enemyTypes.length)]) {
                             case "enemy1":
                                 this.spawn = new enemy1(this, game.config.width - 10, borderUISize*6.5, 'enemy1', null, this.enemyGroup).setOrigin(0, 0.0);
                                 break;
                                 
                             case "enemy2":
-                                this.spawn = new enemy2(this, game.config.width - 10, borderUISize*8.5, 'enemy2', null, this.enemyGroup).setOrigin(0, 0.0);
+                                this.spawn = new enemy2(this, game.config.width - 10, borderUISize*8.6, 'enemy2', null, this.enemyGroup).setOrigin(0, 0.0);
                                 break;
 
                             case "enemy3":
@@ -185,7 +194,8 @@ class Play extends Phaser.Scene {
                     }
                     else
                     {
-                        this.building = new Building(this, game.config.width - 10, borderUISize - 30, 'building', null, this.enemyGroup).setOrigin(0, 0.0);
+                        this.building = new Building(this, game.config.width - 10, borderUISize - 33, 'building', null, this.enemyGroup).setOrigin(0, 0.0);
+                        this.building.depth = 1;
                         this.physics.add.collider(this.building, this.ground);
                         this.physics.add.collider(
                             this.player,
@@ -206,11 +216,6 @@ class Play extends Phaser.Scene {
 
     update(time, delta)
     {
-        if(music.duration >= music.totalDuration)
-        {
-            //music.play();
-        }
-
         this.scoreText.text = score;
 
         //If game over, check input for restart
@@ -232,7 +237,7 @@ class Play extends Phaser.Scene {
                 this.player.jump('playerJump');
             }
             //slide down 
-            if (Phaser.Input.Keyboard.JustDown(keyDown) && this.player.body.touching.down)
+            if (Phaser.Input.Keyboard.JustDown(keyDown) && this.player.body.touching.down && this.player.canSlide && !this.player.isSliding)
             {
                 this.player.slide('playerSlide');            
             }
